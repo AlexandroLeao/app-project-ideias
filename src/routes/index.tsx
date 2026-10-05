@@ -48,17 +48,21 @@ function Home() {
           <h1 className="mt-2 text-5xl font-bold leading-[1.02] md:text-7xl">
             O que temos<br />para <span className="text-primary">hoje</span>?
           </h1>
-          <IdeaForm trigger={<Button size="lg" className="mt-6 h-14 w-full rounded-full px-8 text-base font-semibold sm:w-auto"><Plus /> Nova ideia</Button>} />
         </div>
-        <div className="rounded-2xl bg-ink p-6 text-ink-foreground">
-          <p className="text-sm opacity-70">Em andamento agora</p>
-          <p className="font-display text-5xl font-bold">{doing.length}</p>
-          <ul className="mt-3 space-y-1 text-sm">
-            {doing.slice(0, 3).map((i) => (
-              <li key={i.id}><Link to="/ideia/$id" params={{ id: i.id }} className="underline-offset-4 hover:underline">→ {i.title}</Link></li>
-            ))}
-            {!doing.length && <li className="opacity-70">Nada em execução. Tudo bem.</li>}
-          </ul>
+        <div>
+          <div className="mb-4 flex justify-end">
+            <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
+          </div>
+          <div className="rounded-2xl bg-ink p-6 text-ink-foreground">
+            <p className="text-sm opacity-70">Em andamento agora</p>
+            <p className="font-display text-5xl font-bold">{doing.length}</p>
+            <ul className="mt-3 space-y-1 text-sm">
+              {doing.slice(0, 3).map((i) => (
+                <li key={i.id}><Link to="/ideia/$id" params={{ id: i.id }} className="underline-offset-4 hover:underline">→ {i.title}</Link></li>
+              ))}
+              {!doing.length && <li className="opacity-70">Nada em execução. Tudo bem.</li>}
+            </ul>
+          </div>
         </div>
       </section>
 
