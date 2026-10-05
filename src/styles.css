@@ -104,6 +104,14 @@
 @utility rise {
   animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
+@utility pop {
+  animation: pop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(0.96) translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
 @keyframes rise {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
