@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, X } from "lucide-react";
+import { Plus, Search, X, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Tire os pensamentos da cabeça e coloque-os em ordem: ideias, planos e projetos." },
       { property: "og:title", content: "Lúcida — Organize suas ideias" },
       { property: "og:description", content: "Tire os pensamentos da cabeça e coloque-os em ordem." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -40,16 +42,13 @@ function Home() {
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8 md:py-12">
-      <header className="flex justify-center">
-        <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
-      </header>
-
-      <section className="rise mt-12 grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
+      <section className="rise grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
         <div>
           <p className="text-sm text-muted-foreground">Olá, Alexandro.</p>
           <h1 className="mt-2 text-5xl font-bold leading-[1.02] md:text-7xl">
             O que temos<br />para <span className="text-primary">hoje</span>?
           </h1>
+          <IdeaForm trigger={<Button size="lg" className="mt-6 h-14 w-full rounded-full px-8 text-base font-semibold sm:w-auto"><Plus /> Nova ideia</Button>} />
         </div>
         <div className="rounded-2xl bg-ink p-6 text-ink-foreground">
           <p className="text-sm opacity-70">Em andamento agora</p>
@@ -109,13 +108,13 @@ function Home() {
               </div>
               <h3 className="mt-4 text-xl font-semibold group-hover:text-primary">{i.title}</h3>
               <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{i.description || "Sem descrição."}</p>
-              <span className="mt-auto pt-4 text-xs text-muted-foreground">{fmtDate(i.createdAt)}</span>
+               <span className="mt-auto flex items-center justify-between gap-2 pt-4 text-xs text-muted-foreground">{fmtDate(i.createdAt)}{i.attachment && <Paperclip className="size-4" aria-label="Com anexo" />}</span>
             </Link>
           );
         })}
         {!list.length && (
           <div className="col-span-full rounded-2xl border border-dashed p-12 text-center text-muted-foreground">
-            Nenhum pensamento aqui ainda. Que tal registrar o primeiro?
+            {ideas.length ? "Nenhuma ideia encontrada." : "Nenhuma ideia registrada ainda."}
           </div>
         )}
       </section>
