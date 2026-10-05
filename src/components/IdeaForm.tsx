@@ -64,37 +64,37 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
           <DialogTitle className="font-display text-2xl">{idea ? "Editar ideia" : "O que temos para hoje?"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
-          <div className="space-y-1.5">
+          <div className="field-group space-y-1.5">
             <Label htmlFor="t">Título</Label>
-            <Input id="t" autoFocus value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Estudar Python" required />
+            <Input id="t" autoFocus value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Estudar Python" required className="field-control" />
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
+            <div className="field-group space-y-1.5">
               <Label>Categoria</Label>
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger className="field-control"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {categories.map((c) => <SelectItem key={c.id} value={c.id}>{c.emoji} {c.label}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-1.5">
+            <div className="field-group space-y-1.5">
               <Label>Status</Label>
               <Select value={status} onValueChange={(v) => setStatus(v as Status)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger className="field-control"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {STATUSES.map((s) => <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
           </div>
-          <div className="space-y-1.5">
+          <div className="field-group space-y-1.5">
             <Label htmlFor="d">Descrição</Label>
-            <Textarea id="d" rows={4} maxLength={10000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Escreva livremente. Ela pode simplesmente existir como ideia." />
+            <Textarea id="d" rows={4} maxLength={10000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Escreva livremente. Ela pode simplesmente existir como ideia." className="field-control" />
           </div>
-          <div className="space-y-1.5">
+          <div className="field-group space-y-1.5">
             <Label htmlFor="attachment">Arquivo <span className="font-normal text-muted-foreground">(opcional)</span></Label>
-            <Input id="attachment" type="file" accept=".png,.pdf,image/png,application/pdf" disabled={saving} className="h-auto cursor-pointer py-2" onChange={async (e) => {
+            <Input id="attachment" type="file" accept=".png,.pdf,image/png,application/pdf" disabled={saving} className="field-control h-auto cursor-pointer py-2" onChange={async (e) => {
               const input = e.currentTarget;
               const selected = input.files?.[0];
               if (!selected) return;

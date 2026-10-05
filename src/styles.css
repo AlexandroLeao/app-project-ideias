@@ -80,6 +80,27 @@
   h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; }
 }
 
+@layer components {
+  .field-group label { transition: color 0.25s ease; }
+  .field-group:hover label,
+  .field-group:focus-within label { color: var(--color-primary); }
+
+  .field-control {
+    transition: border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease;
+  }
+  .field-group:hover .field-control {
+    border-color: color-mix(in oklch, var(--color-ring) 45%, var(--color-input));
+    background-color: color-mix(in oklch, var(--color-accent) 40%, transparent);
+  }
+  .field-group:focus-within .field-control {
+    border-color: var(--color-ring);
+    background-color: color-mix(in oklch, var(--color-accent) 55%, transparent);
+    box-shadow: 0 0 0 1px var(--color-ring);
+  }
+  .field-group:focus-within .field-control::file-selector-button,
+  .field-group:focus-within .field-control:focus { outline: none; }
+}
+
 @utility rise {
   animation: rise 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
