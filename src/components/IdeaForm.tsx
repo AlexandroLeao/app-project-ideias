@@ -36,7 +36,7 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="rounded-2xl sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl">{idea ? "Editar ideia" : "O que está na sua cabeça?"}</DialogTitle>
+          <DialogTitle className="font-display text-2xl">{idea ? "Editar ideia" : "O que temos para hoje?"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="space-y-1.5">
