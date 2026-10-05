@@ -50,7 +50,7 @@ function Home() {
           </h1>
         </div>
         <div>
-          <div className="mb-4 flex justify-end">
+          <div className="mb-4 flex justify-center">
             <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
           </div>
           <div className="rounded-2xl bg-ink p-6 text-ink-foreground">
