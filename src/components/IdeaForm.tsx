@@ -64,9 +64,9 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
           <DialogTitle className="font-display text-2xl">{idea ? "Editar ideia" : "O que temos para hoje?"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
-          <div className="space-y-1.5">
+          <div className="field-group space-y-1.5">
             <Label htmlFor="t">Título</Label>
-            <Input id="t" autoFocus value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Estudar Python" required />
+            <Input id="t" autoFocus value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Estudar Python" required className="field-control" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
