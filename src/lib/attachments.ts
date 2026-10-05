@@ -10,7 +10,7 @@ export async function validateAttachment(file: File): Promise<Attachment["type"]
   if (/\.png$/i.test(file.name) && [137, 80, 78, 71, 13, 10, 26, 10].every((b, i) => bytes[i] === b)) return "image/png";
   if (/\.jfif$/i.test(file.name) && [255, 216, 255].every((b, i) => bytes[i] === b)) return "image/jpeg";
   if (/\.pdf$/i.test(file.name) && [37, 80, 68, 70, 45].every((b, i) => bytes[i] === b)) return "application/pdf";
-  throw new Error("Formato inválido. Escolha um PNG ou PDF.");
+  throw new Error("Formato inválido. Escolha um PNG, JFIF ou PDF.");
 }
 
 export async function uploadAttachment(file: File): Promise<Attachment> {
