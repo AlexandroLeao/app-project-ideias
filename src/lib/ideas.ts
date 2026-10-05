@@ -33,7 +33,7 @@ export type Idea = {
   description: string;
   status: Status;
   notes: string;
-  attachment?: Attachment;
+  attachment?: Attachment | undefined;
   createdAt: string;
   updatedAt: string;
 };
