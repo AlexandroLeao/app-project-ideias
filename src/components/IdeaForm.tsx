@@ -92,9 +92,9 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
             <Label htmlFor="d">Descrição</Label>
             <Textarea id="d" rows={4} maxLength={10000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Escreva livremente. Ela pode simplesmente existir como ideia." className="field-control" />
           </div>
-          <div className="space-y-1.5">
+          <div className="field-group space-y-1.5">
             <Label htmlFor="attachment">Arquivo <span className="font-normal text-muted-foreground">(opcional)</span></Label>
-            <Input id="attachment" type="file" accept=".png,.pdf,image/png,application/pdf" disabled={saving} className="h-auto cursor-pointer py-2" onChange={async (e) => {
+            <Input id="attachment" type="file" accept=".png,.pdf,image/png,application/pdf" disabled={saving} className="field-control h-auto cursor-pointer py-2" onChange={async (e) => {
               const input = e.currentTarget;
               const selected = input.files?.[0];
               if (!selected) return;
