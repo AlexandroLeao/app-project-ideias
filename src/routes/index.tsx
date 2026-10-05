@@ -38,7 +38,6 @@ function Home() {
     [ideas, q, cat, st],
   );
   const counts = (id: string) => ideas.filter((i) => i.status === id).length;
-  const doing = ideas.filter((i) => i.status === "andamento");
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8 md:py-12">
@@ -49,20 +48,8 @@ function Home() {
             O que temos<br />para <span className="text-primary">hoje</span>?
           </h1>
         </div>
-        <div>
-          <div className="mb-4 flex justify-center md:mb-0 md:justify-end">
-            <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
-          </div>
-          <div className="rounded-2xl bg-ink p-6 text-ink-foreground md:hidden">
-            <p className="text-sm opacity-70">Em andamento agora</p>
-            <p className="font-display text-5xl font-bold">{doing.length}</p>
-            <ul className="mt-3 space-y-1 text-sm">
-              {doing.slice(0, 3).map((i) => (
-                <li key={i.id}><Link to="/ideia/$id" params={{ id: i.id }} className="underline-offset-4 hover:underline">→ {i.title}</Link></li>
-              ))}
-              {!doing.length && <li className="opacity-70">Nada em execução. Tudo bem.</li>}
-            </ul>
-          </div>
+        <div className="flex justify-center">
+          <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
         </div>
       </section>
 
