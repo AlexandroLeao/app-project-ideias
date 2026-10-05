@@ -40,16 +40,15 @@ function Home() {
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8 md:py-12">
-      <header className="flex items-center justify-between">
-        <span className="font-display text-xl font-bold">lúcida<span className="text-primary">.</span></span>
-        <IdeaForm trigger={<Button className="rounded-full"><Plus /> Nova ideia</Button>} />
+      <header className="flex justify-center">
+        <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
       </header>
 
       <section className="rise mt-12 grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
         <div>
           <p className="text-sm text-muted-foreground">Olá, Alexandro.</p>
           <h1 className="mt-2 text-5xl font-bold leading-[1.02] md:text-7xl">
-            O que está na<br />sua <span className="text-primary">cabeça</span>?
+            O que temos<br />para <span className="text-primary">hoje</span>?
           </h1>
         </div>
         <div className="rounded-2xl bg-ink p-6 text-ink-foreground">
