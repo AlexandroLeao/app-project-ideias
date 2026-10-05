@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import type { Attachment } from "./attachments";
 
 export type Status = "ideia" | "planejando" | "andamento" | "concluido" | "pausado";
 
@@ -32,6 +33,7 @@ export type Idea = {
   description: string;
   status: Status;
   notes: string;
+  attachment?: Attachment | undefined;
   createdAt: string;
   updatedAt: string;
 };
@@ -40,15 +42,6 @@ type State = { ideas: Idea[]; categories: Category[] };
 
 const KEY = "lucida:v1";
 const now = () => new Date().toISOString();
-const seed: State = {
-  categories: DEFAULT_CATEGORIES,
-  ideas: [
-    { id: "s1", title: "Estudar Python", category: "programacao", description: "Quero aprender Python para futuramente desenvolver APIs, automações e projetos de backend.", status: "planejando", notes: "", createdAt: now(), updatedAt: now() },
-    { id: "s2", title: "Iniciar na academia", category: "saude", description: "Pesquisar academias próximas, definir horários e criar uma rotina.", status: "ideia", notes: "", createdAt: now(), updatedAt: now() },
-    { id: "s3", title: "Criar sistema de chamados", category: "projetos", description: "Desenvolver uma aplicação para organização e acompanhamento de chamados de suporte técnico.", status: "andamento", notes: "", createdAt: now(), updatedAt: now() },
-  ],
-};
-
 const EMPTY: State = { ideas: [], categories: DEFAULT_CATEGORIES };
 let state: State | null = null;
 const listeners = new Set<() => void>();
@@ -57,11 +50,14 @@ function load(): State {
   if (state) return state;
   try {
     const raw = localStorage.getItem(KEY);
-    state = raw ? JSON.parse(raw) : seed;
+    const saved = raw ? JSON.parse(raw) as State : EMPTY;
+    const cleaned = { ...saved, ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)) };
+    state = cleaned;
+    if (cleaned.ideas.length !== saved.ideas.length) localStorage.setItem(KEY, JSON.stringify(cleaned));
   } catch {
-    state = seed;
+    state = EMPTY;
   }
-  return state!;
+  return state ?? EMPTY;
 }
 function set(next: State) {
   state = next;
@@ -78,7 +74,7 @@ export function useStore(): State {
 }
 
 export const actions = {
-  create(data: Pick<Idea, "title" | "category" | "description" | "status">) {
+  create(data: Pick<Idea, "title" | "category" | "description" | "status" | "attachment">) {
     const s = load();
     const idea: Idea = { ...data, id: crypto.randomUUID(), notes: "", createdAt: now(), updatedAt: now() };
     set({ ...s, ideas: [idea, ...s.ideas] });
@@ -107,7 +103,7 @@ export const actions = {
   },
 };
 
-export const statusOf = (id: Status) => STATUSES.find((s) => s.id === id)!;
+export const statusOf = (id: Status) => STATUSES.find((s) => s.id === id) ?? STATUSES[0];
 export const catOf = (cats: Category[], id: string) =>
   cats.find((c) => c.id === id) ?? { id, label: "Outros", emoji: "⚙️" };
 export const fmtDate = (iso: string) =>

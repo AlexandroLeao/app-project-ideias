@@ -1,5 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, Trash2, Paperclip, ExternalLink, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { openAttachment } from "@/lib/attachments.functions";
+import type { Attachment } from "@/lib/attachments";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -17,6 +20,8 @@ export const Route = createFileRoute("/ideia/$id")({
       { name: "description", content: "Um espaço onde sua ideia pode crescer." },
       { property: "og:title", content: "Ideia — Lúcida" },
       { property: "og:description", content: "Um espaço onde sua ideia pode crescer." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Detail,
@@ -63,15 +68,16 @@ function Detail() {
       <p className="mt-10 text-sm text-muted-foreground">{c.emoji} {c.label} · criada em {fmtDate(idea.createdAt)}</p>
       <h1 className="mt-2 text-4xl font-bold md:text-6xl">{idea.title}</h1>
       <p className="mt-5 whitespace-pre-wrap text-lg leading-relaxed text-foreground/80">{idea.description || "Sem descrição."}</p>
+      {idea.attachment && <AttachmentSection key={idea.attachment.token} attachment={idea.attachment} />}
 
       <section className="mt-10">
         <h2 className="text-sm font-medium text-muted-foreground">Onde ela está na jornada</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {STATUSES.map((s) => (
-            <button key={s.id} onClick={() => actions.update(idea.id, { status: s.id })} aria-pressed={idea.status === s.id}
+            <Button variant="outline" key={s.id} onClick={() => actions.update(idea.id, { status: s.id })} aria-pressed={idea.status === s.id}
               className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition ${idea.status === s.id ? "border-ink bg-ink text-ink-foreground" : "bg-card hover:bg-secondary"}`}>
               <span className={`size-2 rounded-full ${s.dot}`} />{s.label}
-            </button>
+            </Button>
           ))}
         </div>
       </section>
@@ -85,4 +91,27 @@ function Detail() {
       </section>
     </main>
   );
+}
+
+function AttachmentSection({ attachment }: { attachment: Attachment }) {
+  const [loading, setLoading] = useState(false);
+  const [url, setUrl] = useState<string>();
+  async function show() {
+    setLoading(true);
+    try { setUrl(await openAttachment({ data: attachment })); }
+    catch (error) { toast.error(error instanceof Error ? error.message : "Não foi possível abrir o anexo."); }
+    finally { setLoading(false); }
+  }
+  return <section className="mt-8 border-y py-5">
+    <h2 className="text-lg font-semibold">Arquivo anexado</h2>
+    <div className="mt-3 flex flex-wrap items-center gap-3">
+      <Paperclip className="size-5 shrink-0 text-muted-foreground" />
+      <div className="min-w-0 flex-1"><p className="break-all text-sm font-medium">{attachment.name}</p><p className="text-xs text-muted-foreground">{attachment.type === "image/png" ? "PNG" : "PDF"} · {(attachment.size / 1024 / 1024).toFixed(2)} MB</p></div>
+      <Button variant="outline" disabled={loading} onClick={show}>{loading ? <Loader2 className="animate-spin" /> : <ExternalLink />}{url ? "Atualizar acesso" : "Abrir anexo"}</Button>
+    </div>
+    {url && <div className="mt-4 space-y-3">
+      {attachment.type === "image/png" && <img src={url} alt={attachment.name} className="max-h-96 max-w-full rounded-md object-contain" />}
+      <Button asChild variant="link" className="h-auto px-0"><a href={url} target="_blank" rel="noopener noreferrer">{attachment.type === "application/pdf" ? "Visualizar PDF" : "Abrir imagem"}<ExternalLink /></a></Button>
+    </div>}
+  </section>;
 }

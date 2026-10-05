@@ -1,0 +1,4 @@
+- [x] Reposition Nova ideia beneath the main heading.
+- [x] Remove built-in sample ideas while preserving user-created ideas.
+- [x] Add private PNG/PDF attachments to creation, editing, and detail views.
+- [x] Verify empty start, attachment validation, PNG/PDF upload and access, removal, migration, and save/reload flows.

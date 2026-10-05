@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Preserve the browser-local idea store and migrate away only built-in sample IDs; reopening must not erase user-created ideas.
+- Use private Cloud Storage for attachments with 256-bit per-object capabilities, server-generated short-lived signed URLs, and no public listing; this preserves the existing no-login experience without exposing personal files.
+- Keep attachment validation/upload helpers separate from forms and validate file signatures and limits again before server-side access; this centralizes the PNG/PDF safety boundary.
