@@ -4,9 +4,11 @@ import { z } from "zod";
 const attachmentSchema = z.object({
   token: z.string().regex(/^[a-f0-9]{64}$/),
   name: z.string().trim().min(1).max(255),
-  type: z.enum(["image/png", "application/pdf"]),
+  type: z.enum(["image/png", "image/jpeg", "application/pdf"]),
   size: z.number().int().min(1).max(10 * 1024 * 1024),
 });
+
+const EXTENSIONS: Record<string, string> = { "image/png": "png", "image/jpeg": "jfif", "application/pdf": "pdf" };
 
 // A random 256-bit capability protects each private object without adding a login flow.
 export const prepareAttachmentUpload = createServerFn({ method: "POST" })
