@@ -106,11 +106,11 @@ function AttachmentSection({ attachment }: { attachment: Attachment }) {
     <h2 className="text-lg font-semibold">Arquivo anexado</h2>
     <div className="mt-3 flex flex-wrap items-center gap-3">
       <Paperclip className="size-5 shrink-0 text-muted-foreground" />
-      <div className="min-w-0 flex-1"><p className="break-all text-sm font-medium">{attachment.name}</p><p className="text-xs text-muted-foreground">{attachment.type === "image/png" ? "PNG" : "PDF"} · {(attachment.size / 1024 / 1024).toFixed(2)} MB</p></div>
+      <div className="min-w-0 flex-1"><p className="break-all text-sm font-medium">{attachment.name}</p><p className="text-xs text-muted-foreground">{attachment.type === "image/png" ? "PNG" : attachment.type === "image/jpeg" ? "JFIF" : "PDF"} · {(attachment.size / 1024 / 1024).toFixed(2)} MB</p></div>
       <Button variant="outline" disabled={loading} onClick={show}>{loading ? <Loader2 className="animate-spin" /> : <ExternalLink />}{url ? "Atualizar acesso" : "Abrir anexo"}</Button>
     </div>
     {url && <div className="mt-4 space-y-3">
-      {attachment.type === "image/png" && <img src={url} alt={attachment.name} className="max-h-96 max-w-full rounded-md object-contain" />}
+      {(attachment.type === "image/png" || attachment.type === "image/jpeg") && <img src={url} alt={attachment.name} className="max-h-96 max-w-full rounded-md object-contain" />}
       <Button asChild variant="link" className="h-auto px-0"><a href={url} target="_blank" rel="noopener noreferrer">{attachment.type === "application/pdf" ? "Visualizar PDF" : "Abrir imagem"}<ExternalLink /></a></Button>
     </div>}
   </section>;
