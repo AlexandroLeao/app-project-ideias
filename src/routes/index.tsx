@@ -42,7 +42,7 @@ function Home() {
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-8 md:py-12">
-      <section className="rise grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
+      <section className="rise grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-center">
         <div>
           <p className="text-sm text-muted-foreground">Olá, Alexandro.</p>
           <h1 className="mt-2 text-5xl font-bold leading-[1.02] md:text-7xl">
@@ -50,10 +50,10 @@ function Home() {
           </h1>
         </div>
         <div>
-          <div className="mb-4 flex justify-center">
+          <div className="mb-4 flex justify-center md:mb-0 md:justify-end">
             <IdeaForm trigger={<Button size="lg" className="h-14 rounded-full px-8 text-base font-semibold"><Plus /> Nova ideia</Button>} />
           </div>
-          <div className="rounded-2xl bg-ink p-6 text-ink-foreground">
+          <div className="rounded-2xl bg-ink p-6 text-ink-foreground md:hidden">
             <p className="text-sm opacity-70">Em andamento agora</p>
             <p className="font-display text-5xl font-bold">{doing.length}</p>
             <ul className="mt-3 space-y-1 text-sm">
