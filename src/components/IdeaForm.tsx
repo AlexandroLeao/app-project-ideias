@@ -176,8 +176,8 @@ function DateField({ label, value, onChange, optional, min }: { label: string; v
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" locale={ptBR} selected={selected} defaultMonth={selected ?? (min ? toDate(min) : undefined)}
-              disabled={min ? { before: toDate(min) } : undefined}
+            <Calendar mode="single" locale={ptBR} selected={selected} defaultMonth={selected ?? (min ? toDate(min) : new Date())}
+              disabled={min ? { before: toDate(min) } : false}
               onSelect={(d) => { onChange(d ? format(d, "yyyy-MM-dd") : optional ? undefined : value); setOpen(false); }}
               className="p-3 pointer-events-auto" />
           </PopoverContent>
