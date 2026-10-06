@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plus, Search, X, Paperclip } from "lucide-react";
+import { Plus, Search, X, Paperclip, Star, CalendarClock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { IdeaForm, StatusDot } from "@/components/IdeaForm";
-import { actions, catOf, categoryColor, CATEGORY_COLORS, fmtDate, STATUSES, useStore, type CategoryColor } from "@/lib/ideas";
+import { IdeaForm, PriorityDot, StatusDot } from "@/components/IdeaForm";
+import { actions, catOf, daysLeft, dueLabel, categoryColor, CATEGORY_COLORS, fmtDate, STATUSES, useStore, type CategoryColor } from "@/lib/ideas";
 import { CategoryMark } from "@/components/CategoryMark";
 
 export const Route = createFileRoute("/")({
@@ -32,7 +32,7 @@ function Home() {
     () =>
       ideas.filter(
         (i) =>
-          (!cat || i.category === cat) &&
+          (!cat || (cat === "__fav" ? i.favorite : i.category === cat)) &&
           (!st || i.status === st) &&
           (i.title + " " + i.description).toLowerCase().includes(q.toLowerCase()),
       ),
@@ -76,6 +76,7 @@ function Home() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Chip active={!cat} onClick={() => setCat(null)}>Todas</Chip>
+          <Chip active={cat === "__fav"} onClick={() => setCat(cat === "__fav" ? null : "__fav")}><span className="inline-flex items-center gap-1.5"><Star className="size-3.5 fill-favorite text-favorite" />Favoritos</span></Chip>
           {categories.map((c) => (
             <span key={c.id} className="group relative">
                <Chip active={cat === c.id} onClick={() => setCat(cat === c.id ? null : c.id)}><CategoryMark category={c} /></Chip>
@@ -96,9 +97,15 @@ function Home() {
                className="category-card rise group flex flex-col rounded-2xl border p-5 transition hover:-translate-y-1 hover:shadow-lg">
               <div className="flex items-center justify-between">
                  <span className="py-1 text-xs"><CategoryMark category={c} /></span>
-                <StatusDot status={i.status} />
+                <span className="flex items-center gap-2">
+                  <button type="button" aria-label={i.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} aria-pressed={!!i.favorite}
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); actions.update(i.id, { favorite: !i.favorite }); }}
+                    className="rounded-full p-1 transition hover:scale-110"><Star className={`size-4 ${i.favorite ? "fill-favorite text-favorite" : "text-muted-foreground"}`} /></button>
+                  <StatusDot status={i.status} />
+                </span>
               </div>
               <h3 className="mt-4 text-xl font-semibold group-hover:text-primary">{i.title}</h3>
+              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs"><PriorityDot priority={i.priority} />{i.dueDate && <span className={`inline-flex items-center gap-1 ${daysLeft(i.dueDate) < 0 ? "font-semibold text-destructive" : "text-muted-foreground"}`}><CalendarClock className="size-3.5" />{dueLabel(i.dueDate)}</span>}</div>
               <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{i.description || "Sem descrição."}</p>
                <span className="mt-auto flex items-center justify-between gap-2 pt-4 text-xs text-muted-foreground">{fmtDate(i.createdAt)}{i.attachment && <Paperclip className="size-4" aria-label="Com anexo" />}</span>
             </Link>

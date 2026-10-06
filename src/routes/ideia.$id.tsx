@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Pencil, Trash2, Paperclip, ExternalLink, Loader2 } from "lucide-react";
+import { Star, CalendarDays, ArrowLeft, Pencil, Trash2, Paperclip, ExternalLink, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { openAttachment } from "@/lib/attachments.functions";
 import type { Attachment } from "@/lib/attachments";
@@ -9,8 +9,8 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { IdeaForm } from "@/components/IdeaForm";
-import { actions, catOf, fmtDate, STATUSES, useStore } from "@/lib/ideas";
+import { IdeaForm, PriorityDot } from "@/components/IdeaForm";
+import { actions, catOf, dueLabel, fmtDate, fmtDay, STATUSES, useStore } from "@/lib/ideas";
 import { toast } from "sonner";
 import { CategoryMark } from "@/components/CategoryMark";
 
@@ -49,6 +49,7 @@ function Detail() {
       <div className="flex items-center justify-between">
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="size-4" /> Todas as ideias</Link>
         <div className="flex gap-2">
+          <Button variant="outline" size="icon" aria-pressed={!!idea.favorite} aria-label={idea.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} onClick={() => actions.update(idea.id, { favorite: !idea.favorite })}><Star className={idea.favorite ? "fill-favorite text-favorite" : ""} /></Button>
           <IdeaForm idea={idea} trigger={<Button variant="outline" size="icon" aria-label="Editar"><Pencil /></Button>} />
           <AlertDialog>
             <AlertDialogTrigger asChild><Button variant="outline" size="icon" aria-label="Excluir"><Trash2 /></Button></AlertDialogTrigger>
@@ -68,6 +69,11 @@ function Detail() {
 
       <p className="mt-10 flex flex-wrap items-center gap-2 text-sm text-muted-foreground"><CategoryMark category={c} /> · criada em {fmtDate(idea.createdAt)}</p>
       <h1 className="mt-2 text-4xl font-bold md:text-6xl">{idea.title}</h1>
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+        {idea.priority && <span className="inline-flex items-center gap-1.5">Prioridade: <PriorityDot priority={idea.priority} /></span>}
+        {idea.startDate && <span className="inline-flex items-center gap-1.5"><CalendarDays className="size-4" />Início: {fmtDay(idea.startDate)}</span>}
+        {idea.dueDate && <span className="inline-flex items-center gap-1.5">Prazo: {fmtDay(idea.dueDate)} · {dueLabel(idea.dueDate)}</span>}
+      </div>
       <p className="mt-5 whitespace-pre-wrap text-lg leading-relaxed text-foreground/80">{idea.description || "Sem descrição."}</p>
       {idea.attachment && <AttachmentSection key={idea.attachment.token} attachment={idea.attachment} />}
 
