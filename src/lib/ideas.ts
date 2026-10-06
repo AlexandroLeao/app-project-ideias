@@ -56,7 +56,7 @@ function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
     const saved = raw ? JSON.parse(raw) as State : EMPTY;
-    const cleaned = { ...saved, categories: saved.categories.map((c, index) => ({ ...c, color: c.color ?? DEFAULT_CATEGORIES.find((d) => d.id === c.id)?.color ?? CATEGORY_COLORS[index % CATEGORY_COLORS.length] })), ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)) };
+    const cleaned = { ...saved, categories: saved.categories.map((c, index) => ({ ...c, color: c.color ?? DEFAULT_CATEGORIES.find((d) => d.id === c.id)?.color ?? CATEGORY_COLORS[index % CATEGORY_COLORS.length] ?? "gray" })), ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)) };
     state = cleaned;
     if (cleaned.ideas.length !== saved.ideas.length) localStorage.setItem(KEY, JSON.stringify(cleaned));
   } catch {
