@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { IdeaForm, StatusDot } from "@/components/IdeaForm";
-import { actions, catOf, fmtDate, STATUSES, useStore } from "@/lib/ideas";
+import { actions, catOf, categoryColor, CATEGORY_COLORS, fmtDate, STATUSES, useStore, type CategoryColor } from "@/lib/ideas";
+import { CategoryMark } from "@/components/CategoryMark";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -77,7 +78,7 @@ function Home() {
           <Chip active={!cat} onClick={() => setCat(null)}>Todas</Chip>
           {categories.map((c) => (
             <span key={c.id} className="group relative">
-              <Chip active={cat === c.id} onClick={() => setCat(cat === c.id ? null : c.id)}>{c.emoji} {c.label}</Chip>
+               <Chip active={cat === c.id} onClick={() => setCat(cat === c.id ? null : c.id)}><CategoryMark category={c} /></Chip>
               {c.custom && (
                 <button aria-label={`Remover ${c.label}`} onClick={() => actions.removeCategory(c.id)} className="absolute -right-1 -top-1 hidden rounded-full bg-ink p-0.5 text-ink-foreground group-hover:block"><X className="size-3" /></button>
               )}
@@ -91,10 +92,10 @@ function Home() {
         {list.map((i, idx) => {
           const c = catOf(categories, i.category);
           return (
-            <Link key={i.id} to="/ideia/$id" params={{ id: i.id }} style={{ animationDelay: `${idx * 40}ms` }}
-              className="rise group flex flex-col rounded-2xl border bg-card p-5 transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
+             <Link key={i.id} to="/ideia/$id" params={{ id: i.id }} style={{ animationDelay: `${idx * 40}ms` }} data-category-color={categoryColor(c)}
+               className="category-card rise group flex flex-col rounded-2xl border p-5 transition hover:-translate-y-1 hover:shadow-lg">
               <div className="flex items-center justify-between">
-                <span className="rounded-full bg-secondary px-2.5 py-1 text-xs">{c.emoji} {c.label}</span>
+                 <span className="py-1 text-xs"><CategoryMark category={c} /></span>
                 <StatusDot status={i.status} />
               </div>
               <h3 className="mt-4 text-xl font-semibold group-hover:text-primary">{i.title}</h3>
@@ -124,18 +125,23 @@ function Chip({ active, children, onClick }: { active: boolean; children: React.
 
 function NewCategory() {
   const [label, setLabel] = useState("");
-  const [emoji, setEmoji] = useState("");
+  const { categories } = useStore();
+  const [color, setColor] = useState<CategoryColor>("lime");
   const [open, setOpen] = useState(false);
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={(next) => { if (next) setColor(CATEGORY_COLORS.find((c) => !categories.some((category) => categoryColor(category) === c)) ?? "gray"); setOpen(next); }}>
       <PopoverTrigger asChild>
-        <button className="rounded-full border border-dashed px-3.5 py-1.5 text-sm text-muted-foreground hover:text-foreground">+ Categoria</button>
+        <Button variant="outline" className="h-auto rounded-full border-dashed px-3.5 py-1.5 text-sm text-muted-foreground hover:text-foreground"><Plus /> Categoria</Button>
       </PopoverTrigger>
       <PopoverContent className="w-64">
-        <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); if (!label.trim()) return; actions.addCategory(label.trim(), emoji.trim()); setLabel(""); setEmoji(""); setOpen(false); }}>
-          <Input value={emoji} onChange={(e) => setEmoji(e.target.value)} placeholder="🏷️" className="w-12 px-2 text-center" aria-label="Emoji" />
+        <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); if (!label.trim()) return; actions.addCategory(label.trim(), color); setLabel(""); setOpen(false); }}>
+          <div className="flex flex-wrap gap-1" role="group" aria-label="Cor da categoria">
+            {CATEGORY_COLORS.map((value, index) => <Button key={value} type="button" variant="ghost" size="icon" className="size-8 rounded-full" data-category-color={value} aria-label={`Cor ${["verde", "laranja", "azul", "violeta", "dourada", "rosa antigo", "rosa", "verde-água", "ciano", "cinza", "lima", "vermelha"][index]}`} aria-pressed={color === value} onClick={() => setColor(value)}><span className={`category-dot size-4 rounded-full ${color === value ? "ring-2 ring-foreground ring-offset-2 ring-offset-popover" : ""}`} /></Button>)}
+          </div>
+          <div className="flex gap-2">
           <Input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Nome" aria-label="Nome da categoria" autoFocus />
           <Button size="icon" type="submit" aria-label="Adicionar"><Plus /></Button>
+          </div>
         </form>
       </PopoverContent>
     </Popover>

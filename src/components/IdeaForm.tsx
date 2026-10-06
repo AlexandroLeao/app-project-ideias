@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Paperclip, X, Loader2 } from "lucide-react";
 import { uploadAttachment, validateAttachment } from "@/lib/attachments";
 import { z } from "zod";
+import { CategoryMark } from "@/components/CategoryMark";
 
 const ideaSchema = z.object({
   title: z.string().trim().min(1, "Informe um título.").max(200, "Use até 200 caracteres no título."),
@@ -74,7 +75,7 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="field-control"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {categories.map((c) => <SelectItem key={c.id} value={c.id}>{c.emoji} {c.label}</SelectItem>)}
+                  {categories.map((c) => <SelectItem key={c.id} value={c.id}><CategoryMark category={c} /></SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
