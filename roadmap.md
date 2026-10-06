@@ -2,4 +2,4 @@
 - [x] Remove built-in sample ideas while preserving user-created ideas.
 - [x] Add private PNG/PDF attachments to creation, editing, and detail views.
 - [x] Verify empty start, attachment validation, PNG/PDF upload and access, removal, migration, and save/reload flows.
-- [x] Replace category emojis with colored circles and apply category colors to whole idea cards; verify saving and reopening.
+- [x] Replace category emojis with colored circles and apply category colors to whole idea cards; verify saving and reopening.- [x] Add priority, start/deadline dates, favorites and Favoritos filter.

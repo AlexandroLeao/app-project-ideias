@@ -38,6 +38,10 @@
   --color-status-doing: var(--status-doing);
   --color-status-done: var(--status-done);
   --color-status-paused: var(--status-paused);
+  --color-priority-high: var(--priority-high);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-low: var(--priority-low);
+  --color-favorite: var(--favorite);
 }
 
 :root {
@@ -68,6 +72,10 @@
   --status-doing: oklch(0.55 0.19 262);
   --status-done: oklch(0.65 0.14 155);
   --status-paused: oklch(0.6 0.04 40);
+  --priority-high: oklch(0.58 0.21 27);
+  --priority-medium: oklch(0.82 0.16 90);
+  --priority-low: oklch(0.62 0.16 150);
+  --favorite: oklch(0.8 0.16 80);
   --category-green: oklch(0.48 0.13 150);
   --category-orange: oklch(0.58 0.16 48);
   --category-blue: oklch(0.5 0.17 255);

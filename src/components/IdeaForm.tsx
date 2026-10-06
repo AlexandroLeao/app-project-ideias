@@ -5,9 +5,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { actions, STATUSES, useStore, type Idea, type Status } from "@/lib/ideas";
+import { actions, dueLabel, PRIORITIES, STATUSES, useStore, type Idea, type Priority, type Status } from "@/lib/ideas";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Paperclip, X, Loader2 } from "lucide-react";
+import { Paperclip, X, Loader2, CalendarIcon, Star } from "lucide-react";
 import { uploadAttachment, validateAttachment } from "@/lib/attachments";
 import { z } from "zod";
 import { CategoryMark } from "@/components/CategoryMark";
@@ -17,7 +22,13 @@ const ideaSchema = z.object({
   category: z.string().min(1),
   description: z.string().trim().max(10000, "Use até 10.000 caracteres na descrição."),
   status: z.enum(["ideia", "planejando", "andamento", "concluido", "pausado"]),
-});
+  priority: z.enum(["alta", "media", "baixa"]),
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Escolha a data de início."),
+  dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  favorite: z.boolean(),
+}).refine((d) => !d.dueDate || d.dueDate >= d.startDate, { message: "O prazo deve ser depois da data de início." });
+
+const today = () => format(new Date(), "yyyy-MM-dd");
 
 export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode }) {
   const { categories } = useStore();
@@ -26,6 +37,10 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
   const [category, setCategory] = useState(idea?.category ?? "ideias");
   const [description, setDescription] = useState(idea?.description ?? "");
   const [status, setStatus] = useState<Status>(idea?.status ?? "ideia");
+  const [priority, setPriority] = useState<Priority>(idea?.priority ?? "media");
+  const [startDate, setStartDate] = useState<string>(idea?.startDate ?? today());
+  const [dueDate, setDueDate] = useState<string | undefined>(idea?.dueDate);
+  const [favorite, setFavorite] = useState<boolean>(idea?.favorite ?? false);
   const [file, setFile] = useState<File | null>(null);
   const [attachment, setAttachment] = useState(idea?.attachment);
   const [saving, setSaving] = useState(false);
@@ -33,7 +48,7 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
-    const parsed = ideaSchema.safeParse({ title, category, description, status });
+    const parsed = ideaSchema.safeParse({ title, category, description, status, priority, startDate, dueDate, favorite });
     if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Revise os campos."); return; }
     setSaving(true);
     try {
@@ -44,7 +59,7 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
     } else {
       actions.create(data);
       toast.success("Pensamento registrado");
-      setTitle(""); setDescription(""); setStatus("ideia");
+      setTitle(""); setDescription(""); setStatus("ideia"); setPriority("media"); setStartDate(today()); setDueDate(undefined); setFavorite(false);
       setFile(null); setAttachment(undefined);
     }
     setOpen(false);
@@ -56,7 +71,7 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
   return (
     <Dialog open={open} onOpenChange={(next) => {
       if (saving) return;
-      if (next && idea) { setTitle(idea.title); setCategory(idea.category); setDescription(idea.description); setStatus(idea.status); setAttachment(idea.attachment); setFile(null); }
+      if (next && idea) { setTitle(idea.title); setCategory(idea.category); setDescription(idea.description); setStatus(idea.status); setAttachment(idea.attachment); setFile(null); setPriority(idea.priority ?? "media"); setStartDate(idea.startDate ?? today()); setDueDate(idea.dueDate); setFavorite(idea.favorite ?? false); }
       setOpen(next);
     }}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -89,6 +104,26 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
               </Select>
             </div>
           </div>
+          <div className="field-group space-y-1.5">
+            <Label>Prioridade</Label>
+            <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Prioridade">
+              {PRIORITIES.map((p) => (
+                <Button key={p.id} type="button" variant="outline" role="radio" aria-checked={priority === p.id} onClick={() => setPriority(p.id)}
+                  className={cn("field-control rounded-full transition", priority === p.id && "border-ring bg-accent font-semibold")}>
+                  <span className={`size-2.5 rounded-full ${p.dot}`} aria-hidden />{p.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <DateField label="Data de início" value={startDate} onChange={(v) => v && setStartDate(v)} />
+            <DateField label="Prazo" optional value={dueDate} min={startDate} onChange={setDueDate} />
+          </div>
+          {dueDate && <p className="pop -mt-2 text-xs text-muted-foreground">{dueLabel(dueDate)}</p>}
+          <Button type="button" variant="outline" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}
+            className={cn("field-control w-full justify-start rounded-full transition", favorite && "border-ring bg-accent")}>
+            <Star className={cn("transition", favorite && "fill-favorite text-favorite")} />{favorite ? "Nos favoritos" : "Adicionar aos favoritos"}
+          </Button>
           <div className="field-group space-y-1.5">
             <Label htmlFor="d">Descrição</Label>
             <Textarea id="d" rows={4} maxLength={10000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Escreva livremente. Ela pode simplesmente existir como ideia." className="field-control" />
@@ -124,4 +159,37 @@ export function StatusDot({ status }: { status: Status }) {
       {s.label}
     </span>
   );
+}
+
+function DateField({ label, value, onChange, optional, min }: { label: string; value?: string | undefined; onChange: (v: string | undefined) => void; optional?: boolean; min?: string }) {
+  const [open, setOpen] = useState(false);
+  const toDate = (v: string) => { const [y, m, d] = v.split("-").map(Number); return new Date(y!, m! - 1, d!); };
+  const selected = value ? toDate(value) : undefined;
+  return (
+    <div className="field-group space-y-1.5">
+      <Label>{label} {optional && <span className="font-normal text-muted-foreground">(opcional)</span>}</Label>
+      <div className="flex gap-1">
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button type="button" variant="outline" className={cn("field-control min-w-0 flex-1 justify-start px-3 font-normal", !value && "text-muted-foreground")}>
+              <CalendarIcon />{selected ? format(selected, "dd/MM/yyyy") : "Escolher"}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <Calendar mode="single" locale={ptBR} selected={selected} defaultMonth={selected ?? (min ? toDate(min) : new Date())}
+              disabled={min ? { before: toDate(min) } : false}
+              onSelect={(d) => { onChange(d ? format(d, "yyyy-MM-dd") : optional ? undefined : value); setOpen(false); }}
+              className="p-3 pointer-events-auto" />
+          </PopoverContent>
+        </Popover>
+        {optional && value && <Button type="button" variant="ghost" size="icon" aria-label={`Limpar ${label}`} onClick={() => onChange(undefined)}><X /></Button>}
+      </div>
+    </div>
+  );
+}
+
+export function PriorityDot({ priority }: { priority?: Priority | undefined }) {
+  const p = PRIORITIES.find((x) => x.id === priority);
+  if (!p) return null;
+  return <span className="inline-flex items-center gap-1.5 text-xs font-medium"><span className={`size-2 rounded-full ${p.dot}`} aria-hidden />{p.label}</span>;
 }
