@@ -12,6 +12,7 @@ import {
 import { IdeaForm } from "@/components/IdeaForm";
 import { actions, catOf, fmtDate, STATUSES, useStore } from "@/lib/ideas";
 import { toast } from "sonner";
+import { CategoryMark } from "@/components/CategoryMark";
 
 export const Route = createFileRoute("/ideia/$id")({
   head: () => ({
@@ -65,7 +66,7 @@ function Detail() {
         </div>
       </div>
 
-      <p className="mt-10 text-sm text-muted-foreground">{c.emoji} {c.label} · criada em {fmtDate(idea.createdAt)}</p>
+      <p className="mt-10 flex flex-wrap items-center gap-2 text-sm text-muted-foreground"><CategoryMark category={c} /> · criada em {fmtDate(idea.createdAt)}</p>
       <h1 className="mt-2 text-4xl font-bold md:text-6xl">{idea.title}</h1>
       <p className="mt-5 whitespace-pre-wrap text-lg leading-relaxed text-foreground/80">{idea.description || "Sem descrição."}</p>
       {idea.attachment && <AttachmentSection key={idea.attachment.token} attachment={idea.attachment} />}

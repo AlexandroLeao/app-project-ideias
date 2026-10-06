@@ -68,7 +68,42 @@
   --status-doing: oklch(0.55 0.19 262);
   --status-done: oklch(0.65 0.14 155);
   --status-paused: oklch(0.6 0.04 40);
+  --category-green: oklch(0.48 0.13 150);
+  --category-orange: oklch(0.58 0.16 48);
+  --category-blue: oklch(0.5 0.17 255);
+  --category-violet: oklch(0.5 0.17 300);
+  --category-gold: oklch(0.57 0.12 85);
+  --category-rose: oklch(0.52 0.12 10);
+  --category-pink: oklch(0.55 0.17 340);
+  --category-teal: oklch(0.46 0.09 185);
+  --category-cyan: oklch(0.52 0.1 220);
+  --category-gray: oklch(0.5 0.015 260);
+  --category-lime: oklch(0.52 0.13 125);
+  --category-red: oklch(0.5 0.18 28);
 }
+
+[data-category-color="green"] { --category-color: var(--category-green); }
+[data-category-color="orange"] { --category-color: var(--category-orange); }
+[data-category-color="blue"] { --category-color: var(--category-blue); }
+[data-category-color="violet"] { --category-color: var(--category-violet); }
+[data-category-color="gold"] { --category-color: var(--category-gold); }
+[data-category-color="rose"] { --category-color: var(--category-rose); }
+[data-category-color="pink"] { --category-color: var(--category-pink); }
+[data-category-color="teal"] { --category-color: var(--category-teal); }
+[data-category-color="cyan"] { --category-color: var(--category-cyan); }
+[data-category-color="gray"] { --category-color: var(--category-gray); }
+[data-category-color="lime"] { --category-color: var(--category-lime); }
+[data-category-color="red"] { --category-color: var(--category-red); }
+.category-dot { background-color: var(--category-color); }
+.category-card {
+  background-color: color-mix(in srgb, var(--category-color) 24%, var(--card));
+  border-color: color-mix(in srgb, var(--category-color) 40%, var(--border));
+  color: var(--foreground);
+}
+.category-card:hover { border-color: var(--category-color); }
+.category-card .text-muted-foreground { color: color-mix(in oklch, var(--foreground) 80%, var(--category-color)); }
+.category-card h3 { overflow-wrap: anywhere; }
+.category-card:hover h3 { color: var(--category-color); }
 
 @layer base {
   * { border-color: var(--color-border); }

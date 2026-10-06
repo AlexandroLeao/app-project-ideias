@@ -11,20 +11,25 @@ export const STATUSES: { id: Status; label: string; dot: string }[] = [
   { id: "pausado", label: "Pausado", dot: "bg-status-paused" },
 ];
 
-export type Category = { id: string; label: string; emoji: string; custom?: boolean };
+export const CATEGORY_COLORS = ["green", "orange", "blue", "violet", "gold", "rose", "pink", "teal", "cyan", "gray", "lime", "red"] as const;
+export type CategoryColor = typeof CATEGORY_COLORS[number];
+export type Category = { id: string; label: string; color?: CategoryColor; emoji?: string; custom?: boolean };
 
 export const DEFAULT_CATEGORIES: Category[] = [
-  { id: "programacao", label: "Programação", emoji: "💻" },
-  { id: "estudos", label: "Estudos", emoji: "📚" },
-  { id: "carreira", label: "Carreira", emoji: "💼" },
-  { id: "projetos", label: "Projetos", emoji: "🚀" },
-  { id: "financeiro", label: "Financeiro", emoji: "💰" },
-  { id: "pessoal", label: "Pessoal", emoji: "🏠" },
-  { id: "hobby", label: "Hobby", emoji: "🎨" },
-  { id: "saude", label: "Saúde", emoji: "🏃" },
-  { id: "ideias", label: "Ideias", emoji: "💭" },
-  { id: "outros", label: "Outros", emoji: "⚙️" },
+  { id: "programacao", label: "Programação", color: "green" },
+  { id: "estudos", label: "Estudos", color: "orange" },
+  { id: "carreira", label: "Carreira", color: "blue" },
+  { id: "projetos", label: "Projetos", color: "violet" },
+  { id: "financeiro", label: "Financeiro", color: "gold" },
+  { id: "pessoal", label: "Pessoal", color: "rose" },
+  { id: "hobby", label: "Hobby", color: "pink" },
+  { id: "saude", label: "Saúde", color: "teal" },
+  { id: "ideias", label: "Ideias", color: "cyan" },
+  { id: "outros", label: "Outros", color: "gray" },
 ];
+
+export const categoryColor = (category: Category): CategoryColor =>
+  category.color ?? DEFAULT_CATEGORIES.find((c) => c.id === category.id)?.color ?? "gray";
 
 export type Idea = {
   id: string;
@@ -51,7 +56,7 @@ function load(): State {
   try {
     const raw = localStorage.getItem(KEY);
     const saved = raw ? JSON.parse(raw) as State : EMPTY;
-    const cleaned = { ...saved, ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)) };
+    const cleaned = { ...saved, categories: saved.categories.map((c, index) => ({ ...c, color: c.color ?? DEFAULT_CATEGORIES.find((d) => d.id === c.id)?.color ?? CATEGORY_COLORS[index % CATEGORY_COLORS.length] ?? "gray" })), ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)) };
     state = cleaned;
     if (cleaned.ideas.length !== saved.ideas.length) localStorage.setItem(KEY, JSON.stringify(cleaned));
   } catch {
@@ -88,9 +93,9 @@ export const actions = {
     const s = load();
     set({ ...s, ideas: s.ideas.filter((i) => i.id !== id) });
   },
-  addCategory(label: string, emoji: string) {
+  addCategory(label: string, color: CategoryColor) {
     const s = load();
-    const c: Category = { id: crypto.randomUUID(), label, emoji: emoji || "🏷️", custom: true };
+    const c: Category = { id: crypto.randomUUID(), label, color, custom: true };
     set({ ...s, categories: [...s.categories, c] });
     return c;
   },
@@ -105,6 +110,6 @@ export const actions = {
 
 export const statusOf = (id: Status) => STATUSES.find((s) => s.id === id) ?? STATUSES[0];
 export const catOf = (cats: Category[], id: string) =>
-  cats.find((c) => c.id === id) ?? { id, label: "Outros", emoji: "⚙️" };
+  cats.find((c) => c.id === id) ?? { id, label: "Outros", color: "gray" as const };
 export const fmtDate = (iso: string) =>
   new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
