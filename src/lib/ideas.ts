@@ -31,17 +31,34 @@ export const DEFAULT_CATEGORIES: Category[] = [
 export const categoryColor = (category: Category): CategoryColor =>
   category.color ?? DEFAULT_CATEGORIES.find((c) => c.id === category.id)?.color ?? "gray";
 
+export type Priority = "alta" | "media" | "baixa";
+export const PRIORITIES: { id: Priority; label: string; dot: string }[] = [
+  { id: "alta", label: "Alta", dot: "bg-priority-high" },
+  { id: "media", label: "Média", dot: "bg-priority-medium" },
+  { id: "baixa", label: "Baixa", dot: "bg-priority-low" },
+];
+export const priorityOf = (id?: Priority) => PRIORITIES.find((p) => p.id === id);
+
 export type Idea = {
   id: string;
   title: string;
   category: string;
   description: string;
   status: Status;
+  priority?: Priority | undefined;
+  startDate?: string | undefined; // yyyy-MM-dd
+  dueDate?: string | undefined; // yyyy-MM-dd
+  favorite?: boolean | undefined;
   notes: string;
   attachment?: Attachment | undefined;
   createdAt: string;
   updatedAt: string;
 };
+
+const parseDay = (d: string) => { const [y, m, day] = d.split("-").map(Number); return new Date(y!, (m ?? 1) - 1, day ?? 1); };
+export const fmtDay = (d: string) => parseDay(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+export const daysLeft = (d: string) => { const t = new Date(); t.setHours(0, 0, 0, 0); return Math.round((parseDay(d).getTime() - t.getTime()) / 86400000); };
+export const dueLabel = (d: string) => { const n = daysLeft(d); return n < 0 ? `Atrasado ${-n} dia${n === -1 ? "" : "s"}` : n === 0 ? "Prazo hoje" : `${n} dia${n === 1 ? "" : "s"} restante${n === 1 ? "" : "s"}`; };
 
 type State = { ideas: Idea[]; categories: Category[] };
 
@@ -79,7 +96,7 @@ export function useStore(): State {
 }
 
 export const actions = {
-  create(data: Pick<Idea, "title" | "category" | "description" | "status" | "attachment">) {
+  create(data: Pick<Idea, "title" | "category" | "description" | "status" | "attachment" | "priority" | "startDate" | "dueDate" | "favorite">) {
     const s = load();
     const idea: Idea = { ...data, id: crypto.randomUUID(), notes: "", createdAt: now(), updatedAt: now() };
     set({ ...s, ideas: [idea, ...s.ideas] });
