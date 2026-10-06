@@ -96,8 +96,8 @@
 [data-category-color="red"] { --category-color: var(--category-red); }
 .category-dot { background-color: var(--category-color); }
 .category-card {
-  background-color: color-mix(in oklch, var(--category-color) 24%, var(--card));
-  border-color: color-mix(in oklch, var(--category-color) 40%, var(--border));
+  background-color: color-mix(in srgb, var(--category-color) 24%, var(--card));
+  border-color: color-mix(in srgb, var(--category-color) 40%, var(--border));
   color: var(--foreground);
 }
 .category-card:hover { border-color: var(--category-color); }
