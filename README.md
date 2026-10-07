@@ -1,4 +1,4 @@
-# Gerenciador de Ideias e Projetos
+# Organizador de Ideias e Projetos
 
 Aplicação web desenvolvida para organizar ideias, projetos, planejamentos e objetivos pessoais de forma simples, visual e estruturada.
 
