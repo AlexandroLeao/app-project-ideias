@@ -1,358 +1,326 @@
-/
-├── README.md
-│
-└── docs/
-    ├── 01-visao-do-projeto.md
-    ├── 02-problema-e-objetivos.md
-    ├── 03-requisitos.md
-    ├── 04-casos-de-uso.md
-    ├── 05-modelagem.md
-    ├── 06-arquitetura.md
-    ├── 07-ux-ui.md
-    ├── 08-desenvolvimento.md
-    ├── 09-seguranca.md
-    ├── 10-testes.md
-    ├── 11-versionamento.md
-    ├── 12-deploy.md
-    ├── 13-resultados.md
-    ├── 14-limitacoes.md
-    └── 15-roadmap.md
+# 01 — Visão do Projeto
 
-# 1. Visão do Projeto
+## 1. Identificação
 
-## 1.1 Nome
+**Nome do projeto:** Organizador de Ideias e Projetos
 
-**Organizador de Ideias e Projetos**
+**Tipo:** Aplicação Web / Projeto Pessoal
 
-## 1.2 Descrição
+**Objetivo:** Organização, acompanhamento e evolução de ideias, planos e projetos pessoais.
 
-O Organizador de Ideias e Projetos é uma aplicação web desenvolvida para centralizar e organizar ideias, projetos, estudos, planejamentos e outros assuntos pessoais em um único ambiente.
+**Status:** Projeto desenvolvido e publicado.
 
-A aplicação foi concebida a partir de uma necessidade real: evitar que diferentes ideias e projetos fiquem dispersos, dificultando a definição de prioridades e o acompanhamento da evolução de cada iniciativa.
-
-## 1.3 Propósito
-
-O propósito principal da aplicação é oferecer uma forma simples e intuitiva de registrar uma ideia e acompanhar sua evolução ao longo do tempo.
-
-A proposta não é funcionar apenas como uma lista de tarefas, mas como um espaço para registrar o contexto de uma ideia, seus objetivos, planejamento e informações relacionadas.
-
-## 1.4 Público-alvo
-
-Inicialmente, a aplicação foi projetada para uso pessoal, podendo posteriormente ser adaptada para outros usuários que necessitem organizar ideias e projetos.
-
-## 1.5 Escopo atual
-
-A versão atual permite:
-
-- cadastrar ideias e projetos;
-- definir título;
-- classificar por categoria;
-- definir status;
-- definir prioridade;
-- adicionar descrição;
-- registrar data de início;
-- definir prazo opcional;
-- marcar itens como favoritos;
-- anexar arquivos;
-- visualizar e organizar os registros.
-
-## 1.6 Persistência
-
-Os dados da aplicação são armazenados localmente no navegador por meio de **LocalStorage**.
-
-Essa abordagem foi adotada para manter o projeto simples e adequado ao escopo inicial, sem necessidade de backend ou banco de dados externo.
-
-## 1.7 Desenvolvimento
-
-O projeto foi desenvolvido com auxílio de uma ferramenta de desenvolvimento assistido por IA/low-code.
-
-A participação no desenvolvimento envolveu principalmente a definição do problema, levantamento e evolução dos requisitos, decisões de escopo, definição das funcionalidades, decisões de UX/UI, validação do comportamento da aplicação, documentação, versionamento e publicação.
-
-## 1.8 Publicação
-
-O projeto foi versionado no GitHub e disponibilizado para acesso por meio da Vercel.
-
-## 1.9 Status
-
-**Concluído — versão inicial publicada.**
-
-O projeto permanece preparado para futuras evoluções, principalmente relacionadas a automações, recursos de inteligência artificial e persistência em backend.
-
-# 2. Problema e Objetivos
-
-## 2.1 Problema
-
-Durante a organização de atividades pessoais, estudos e projetos, diferentes ideias podem surgir simultaneamente. Quando essas informações ficam distribuídas entre anotações, aplicativos e outros meios, torna-se mais difícil saber:
-
-- quais ideias existem;
-- quais são prioritárias;
-- quais estão sendo desenvolvidas;
-- quais foram pausadas;
-- quais possuem prazo;
-- qual é o objetivo de cada projeto;
-- quais ideias podem ser retomadas posteriormente.
-
-Além disso, uma lista de tarefas tradicional não atende completamente à necessidade, pois muitas ideias não são tarefas isoladas. Elas possuem contexto, objetivos, planejamento e podem evoluir durante um período maior.
-
-## 2.2 Necessidade identificada
-
-Foi identificada a necessidade de criar uma ferramenta capaz de registrar uma ideia desde seu surgimento e acompanhar sua evolução sem exigir uma estrutura complexa.
-
-## 2.3 Objetivo geral
-
-Desenvolver uma aplicação web simples e intuitiva para centralizar, organizar e acompanhar ideias e projetos.
-
-## 2.4 Objetivos específicos
-
-- centralizar diferentes tipos de ideias em um único local;
-- permitir classificação por categorias;
-- permitir acompanhamento por status;
-- possibilitar definição de prioridade;
-- permitir registro de datas;
-- permitir definição de prazo;
-- possibilitar marcação de itens importantes como favoritos;
-- permitir armazenamento de informações descritivas;
-- permitir anexos relacionados à ideia;
-- manter os dados disponíveis no navegador;
-- disponibilizar a aplicação online.
-
-## 2.5 Critérios de sucesso
-
-O projeto é considerado funcional quando o usuário consegue:
-
-1. criar uma nova ideia;
-2. preencher suas principais informações;
-3. visualizar a ideia posteriormente;
-4. alterar seu status;
-5. definir ou alterar sua prioridade;
-6. acompanhar informações de prazo;
-7. identificar itens favoritos;
-8. editar ou remover registros;
-9. utilizar a aplicação após recarregar a página;
-10. acessar a aplicação por meio do ambiente publicado.
-
-# 3. Requisitos de Software
-
-## 3.1 Requisitos Funcionais
-
-### RF01 — Cadastro de ideia
-
-O sistema deve permitir o cadastro de uma nova ideia ou projeto.
-
-### RF02 — Título
-
-O sistema deve permitir informar um título para cada registro.
-
-### RF03 — Categoria
-
-O sistema deve permitir classificar o registro em categorias.
-
-Categorias disponíveis:
-
-- Ideias
-- Programação
-- Estudos
-- Carreira
-- Projetos
-- Financeiro
-- Pessoal
-- Hobby
-- Saúde
-- Outros
-
-### RF04 — Status
-
-O sistema deve permitir definir o estado atual do registro.
-
-Status disponíveis:
-
-- Ideia
-- Planejando
-- Em andamento
-- Concluído
-- Pausado
-
-### RF05 — Descrição
-
-O sistema deve permitir adicionar informações descritivas relacionadas à ideia ou projeto.
-
-### RF06 — Prioridade
-
-O sistema deve permitir definir o nível de prioridade:
-
-- Alta
-- Média
-- Baixa
-
-### RF07 — Data de início
-
-O sistema deve permitir registrar uma data de início para o projeto ou ideia.
-
-### RF08 — Prazo
-
-O sistema deve permitir informar um prazo opcional para conclusão.
-
-### RF09 — Favoritos
-
-O sistema deve permitir marcar e desmarcar registros como favoritos.
-
-### RF10 — Anexos
-
-O sistema deve permitir adicionar arquivos associados ao registro, respeitando os formatos e limites definidos pela aplicação.
-
-Formatos previstos:
-
-- PNG
-- JFIF
-- PDF
-
-Limite:
-
-- 10 MB por arquivo.
-
-### RF11 — Persistência
-
-O sistema deve manter os dados registrados no navegador utilizando armazenamento local.
-
-### RF12 — Edição
-
-O sistema deve permitir alterar informações de um registro existente.
-
-### RF13 — Exclusão
-
-O sistema deve permitir remover um registro existente.
+**URL:** https://app-project-ideias.vercel.app/
 
 ---
 
-# 3.2 Requisitos Não Funcionais
+## 2. Descrição
+
+O Organizador de Ideias e Projetos é uma aplicação web criada para centralizar ideias, planos, estudos e projetos que, normalmente, poderiam ficar dispersos em anotações, aplicativos ou arquivos diferentes.
+
+A proposta não é funcionar apenas como uma lista tradicional de tarefas. Cada ideia possui informações próprias, como título, categoria, descrição, prioridade, status, datas, favoritos e anexos, permitindo que uma ideia evolua de um registro inicial para um projeto acompanhado ao longo do tempo.
+
+---
+
+## 3. Objetivo do projeto
+
+O objetivo principal é proporcionar uma forma simples e visual de:
+
+- registrar novas ideias;
+- organizar ideias por categoria;
+- definir prioridades;
+- acompanhar status;
+- registrar informações e observações;
+- estabelecer datas;
+- marcar ideias como favoritas;
+- adicionar arquivos de referência;
+- consultar e editar cada ideia individualmente.
+
+---
+
+## 4. Escopo
+
+O escopo atual contempla:
+
+- criação de ideias;
+- edição e exclusão;
+- categorização;
+- prioridades;
+- status;
+- datas de início e prazo;
+- cálculo de prazo restante;
+- favoritos;
+- pesquisa e filtros;
+- descrição e anotações;
+- anexos;
+- página individual de cada ideia;
+- armazenamento local das ideias;
+- armazenamento privado de anexos;
+- interface responsiva;
+- publicação da aplicação.
+
+---
+
+## 5. Princípio do projeto
+
+A aplicação foi desenvolvida priorizando simplicidade de uso, resposta rápida e clareza visual.
+
+# 02 — Problema e Objetivos
+
+## 1. Problema identificado
+
+O projeto surgiu a partir de uma necessidade pessoal de organizar diferentes ideias, projetos, estudos e planos.
+
+Quando essas informações ficam distribuídas entre anotações, arquivos, aplicativos de mensagens ou simplesmente na memória, alguns problemas podem surgir:
+
+- dificuldade para lembrar ideias antigas;
+- falta de visão geral dos projetos;
+- dificuldade para definir o que merece atenção primeiro;
+- informações relacionadas ao mesmo projeto espalhadas;
+- ausência de acompanhamento de evolução;
+- perda de referências e arquivos;
+- dificuldade para diferenciar ideias em diferentes estágios.
+
+Uma lista de tarefas convencional também não atende completamente à necessidade, pois uma ideia pode existir por bastante tempo antes de se transformar em uma tarefa concreta.
+
+---
+
+## 2. Objetivo geral
+
+Desenvolver uma aplicação web capaz de centralizar ideias e projetos em um único ambiente, permitindo registrar, organizar, priorizar, acompanhar e evoluir essas informações.
+
+---
+
+## 3. Objetivos específicos
+
+A aplicação busca permitir:
+
+1. Registrar uma nova ideia rapidamente.
+2. Classificar ideias por categorias.
+3. Definir prioridade.
+4. Acompanhar o status de cada ideia.
+5. Registrar descrições e observações.
+6. Definir data de início e prazo.
+7. Visualizar o tempo restante para um prazo.
+8. Marcar ideias importantes como favoritas.
+9. Pesquisar e filtrar ideias.
+10. Adicionar arquivos relacionados.
+11. Consultar uma página detalhada de cada ideia.
+12. Editar informações posteriormente.
+13. Excluir ideias que não sejam mais necessárias.
+14. Disponibilizar a aplicação em ambiente publicado.
+
+---
+
+## 4. Critérios de sucesso
+
+O projeto é considerado funcional quando permite ao usuário:
+
+- criar uma ideia;
+- visualizar a ideia criada;
+- editar suas informações;
+- alterar status e prioridade;
+- utilizar categorias e filtros;
+- definir datas;
+- marcar como favorita;
+- adicionar e consultar anexos;
+- excluir uma ideia;
+- utilizar a aplicação publicada.
+
+- # 03 — Requisitos do Sistema
+
+## 1. Requisitos Funcionais
+
+### RF01 — Criar ideia
+O sistema deve permitir o cadastro de uma nova ideia.
+
+### RF02 — Informar título
+Cada ideia deve possuir um título identificável.
+
+### RF03 — Categorizar ideia
+O usuário deve poder associar uma categoria à ideia.
+
+### RF04 — Informar descrição
+O sistema deve permitir registrar descrição, observações e informações adicionais.
+
+### RF05 — Definir status
+O usuário deve poder definir ou alterar o status da ideia.
+
+### RF06 — Definir prioridade
+O usuário deve poder definir prioridade:
+
+- Alta;
+- Média;
+- Baixa.
+
+### RF07 — Definir datas
+O sistema deve permitir informar:
+
+- data de início;
+- prazo opcional.
+
+### RF08 — Calcular prazo
+Quando houver prazo definido, o sistema deve apresentar a quantidade de dias restantes.
+
+### RF09 — Favoritar
+O usuário deve poder marcar e desmarcar uma ideia como favorita.
+
+### RF10 — Pesquisar e filtrar
+O sistema deve permitir localizar ideias por pesquisa, favoritos e categorias.
+
+### RF11 — Adicionar anexos
+O usuário deve poder adicionar arquivos aos projetos.
+
+Formatos suportados:
+
+- PNG;
+- JPEG;
+- JFIF;
+- PDF.
+
+Tamanho máximo:
+
+**10 MB por arquivo.**
+
+### RF12 — Consultar detalhes
+Cada ideia deve possuir uma página própria para consulta e edição.
+
+### RF13 — Editar
+O usuário deve poder alterar as informações cadastradas.
+
+### RF14 — Excluir
+O sistema deve permitir excluir uma ideia.
+
+### RF15 — Visualizar e baixar anexos
+Os anexos devem poder ser visualizados ou baixados quando aplicável.
+
+---
+
+# 2. Requisitos Não Funcionais
 
 ### RNF01 — Usabilidade
-
-A interface deve ser simples e intuitiva, permitindo que o usuário compreenda as principais ações sem necessidade de treinamento.
+A interface deve ser simples, clara e intuitiva.
 
 ### RNF02 — Responsividade
+A aplicação deve ser utilizável em diferentes tamanhos de tela.
 
-A aplicação deve apresentar uma interface adequada aos diferentes tamanhos de tela suportados.
+### RNF03 — Desempenho
+As operações relacionadas às ideias devem apresentar resposta rápida.
 
-### RNF03 — Persistência local
+### RNF04 — Validação
+Os dados de formulários e arquivos devem ser submetidos a validações.
 
-Os dados devem permanecer disponíveis após o recarregamento da página, desde que o armazenamento local do navegador não seja removido.
-
-### RNF04 — Segurança
-
-A aplicação deve realizar validações básicas das entradas fornecidas pelo usuário e dos arquivos anexados.
-
-### RNF05 — Desempenho
-
-As operações principais devem apresentar resposta adequada para a quantidade de dados esperada no escopo inicial.
+### RNF05 — Segurança de arquivos
+Os anexos não devem depender apenas da extensão do arquivo para validação.
 
 ### RNF06 — Manutenibilidade
-
-A estrutura do projeto deve permitir futuras alterações e inclusão de novas funcionalidades.
+A aplicação deve possuir uma estrutura organizada de componentes, rotas, estilos e funções.
 
 ### RNF07 — Disponibilidade
+A aplicação deve permanecer acessível por meio de ambiente de publicação.
 
-A aplicação deve estar disponível por meio de uma URL pública após o processo de publicação.
-
----
-
-# 3.3 Evolução dos requisitos
-
-Os requisitos foram definidos e refinados de maneira incremental.
-
-A primeira versão concentrava-se nas informações essenciais de uma ideia:
-
-**título → categoria → status → descrição → anexo**
-
-Durante a evolução do projeto, foram identificadas novas necessidades de organização:
-
-**prioridade → data de início → prazo → favoritos**
-
-Essa evolução representa uma abordagem incremental, na qual as funcionalidades são adicionadas conforme novas necessidades são identificadas durante a utilização e validação do produto.
-
-# 4. Casos de Uso
-
-## 4.1 Ator
-
-### Usuário
-
-O usuário é o principal ator da aplicação e possui acesso às funcionalidades de criação, consulta, edição, organização e exclusão de ideias e projetos.
+### RNF08 — Privacidade dos anexos
+Os arquivos armazenados em nuvem devem utilizar armazenamento privado e mecanismos de acesso controlado.
 
 ---
 
-## UC01 — Criar ideia/projeto
+# 3. Regras de negócio
 
-**Ator:** Usuário
+### RN01 — Prioridade
+Cada ideia deve possuir uma prioridade definida.
 
-**Objetivo:** Registrar uma nova ideia ou projeto.
+### RN02 — Prazo
+O prazo é opcional.
+
+### RN03 — Anexos
+Arquivos devem respeitar os formatos e tamanho permitidos.
+
+### RN04 — Validação do arquivo
+A aplicação deve verificar o conteúdo real do arquivo, e não somente seu nome ou extensão.
+
+### RN05 — Acesso aos anexos
+Links para visualização de arquivos possuem validade limitada.
+
+---
+
+# 4. Evolução dos requisitos
+
+O projeto foi desenvolvido de forma incremental.
+
+O escopo inicial concentrou-se no cadastro e organização das ideias. Posteriormente foram incorporados recursos como:
+
+- prioridade;
+- datas;
+- prazo;
+- favoritos;
+- filtros;
+- anexos;
+- página detalhada;
+- refinamentos de interface.
+
+- # 04 — Casos de Uso
+
+## 1. Ator
+
+**Usuário**
+
+O usuário é responsável por criar, consultar, organizar, editar e excluir suas ideias e projetos.
+
+---
+
+## 2. UC01 — Criar ideia
+
+**Objetivo:** Registrar uma nova ideia.
 
 **Fluxo principal:**
 
-1. O usuário acessa a funcionalidade de criação.
-2. Informa o título.
-3. Seleciona a categoria.
-4. Define o status.
-5. Informa a descrição.
-6. Define a prioridade.
-7. Informa a data de início, quando aplicável.
-8. Informa um prazo, quando aplicável.
-9. Adiciona um anexo, quando necessário.
-10. Confirma o cadastro.
-11. O sistema registra as informações.
+1. Usuário acessa a aplicação.
+2. Seleciona a opção de nova ideia.
+3. Preenche os dados disponíveis.
+4. Define categoria e prioridade.
+5. Pode informar datas.
+6. Pode adicionar anexos.
+7. Confirma o cadastro.
+8. O sistema registra a ideia.
+
+**Resultado:** Nova ideia disponível no painel.
 
 ---
 
-## UC02 — Consultar ideias/projetos
+## 3. UC02 — Consultar ideias
 
-**Ator:** Usuário
+**Objetivo:** Visualizar ideias cadastradas.
 
-**Objetivo:** Visualizar os registros cadastrados.
+**Fluxo:**
 
-**Fluxo principal:**
-
-1. O usuário acessa a aplicação.
-2. O sistema apresenta os registros existentes.
-3. O usuário consulta as informações disponíveis.
-
----
-
-## UC03 — Editar ideia/projeto
-
-**Ator:** Usuário
-
-**Objetivo:** Atualizar um registro existente.
-
-**Fluxo principal:**
-
-1. O usuário seleciona um registro.
-2. Solicita a edição.
-3. Altera as informações desejadas.
-4. Confirma a alteração.
-5. O sistema atualiza o registro.
+1. Usuário acessa a página inicial.
+2. O sistema apresenta as ideias.
+3. Usuário pode pesquisar ou utilizar filtros.
+4. Usuário seleciona uma ideia.
+5. O sistema apresenta seus detalhes.
 
 ---
 
-## UC04 — Alterar status
+## 4. UC03 — Editar ideia
 
-**Ator:** Usuário
+**Objetivo:** Alterar informações existentes.
 
-**Objetivo:** Atualizar a situação de uma ideia ou projeto.
-
-Exemplos:
-
-**Ideia → Planejando → Em andamento → Concluído**
-
-Também é possível utilizar o status **Pausado** quando o desenvolvimento for interrompido temporariamente.
+1. Usuário abre uma ideia.
+2. Altera os campos desejados.
+3. Confirma as alterações.
+4. O sistema atualiza os dados.
 
 ---
 
-## UC05 — Definir prioridade
+## 5. UC04 — Alterar status
 
-**Ator:** Usuário
+O usuário pode modificar o estágio atual da ideia diretamente na página de detalhes.
 
-**Objetivo:** Identificar o nível de importância de uma ideia.
+---
 
-O usuário pode selecionar:
+## 6. UC05 — Alterar prioridade
+
+O usuário pode definir ou modificar a prioridade entre:
 
 - Alta;
 - Média;
@@ -360,306 +328,907 @@ O usuário pode selecionar:
 
 ---
 
-## UC06 — Favoritar registro
+## 7. UC06 — Favoritar ideia
 
-**Ator:** Usuário
+O usuário pode marcar uma ideia como favorita por meio do ícone de estrela.
 
-**Objetivo:** Destacar ideias consideradas importantes.
-
-O usuário pode marcar ou remover a marcação de favorito.
+As ideias favoritas também podem ser filtradas.
 
 ---
 
-## UC07 — Adicionar anexo
+## 8. UC07 — Adicionar anexo
 
-**Ator:** Usuário
-
-**Objetivo:** Associar um arquivo a uma ideia ou projeto.
-
-O sistema deve validar o tipo e o tamanho do arquivo conforme as regras estabelecidas.
-
----
-
-## UC08 — Excluir registro
-
-**Ator:** Usuário
-
-**Objetivo:** Remover uma ideia ou projeto que não seja mais necessário.
-
-O sistema remove o registro após a confirmação da operação.
+1. Usuário seleciona um arquivo.
+2. Sistema verifica formato e tamanho.
+3. O conteúdo do arquivo é validado.
+4. O arquivo é enviado para armazenamento privado.
+5. O anexo passa a ficar associado à ideia.
 
 ---
 
-# 4.2 Relação entre casos de uso
+## 9. UC08 — Excluir ideia
 
-                    ┌──────────────────────────┐
-                    │          Usuário          │
-                    └────────────┬─────────────┘
-                                 │
-              ┌──────────────────┼──────────────────┐
-              │                  │                  │
-              ▼                  ▼                  ▼
-       Criar registro      Consultar registro    Editar registro
-              │                                     │
-              ├──────────────┐             ┌────────┼────────┐
-              ▼              ▼             ▼        ▼        ▼
-         Definir        Adicionar       Status  Prioridade Favorito
-        informações      anexo
-              │
-              ▼
-        Excluir registro
+1. Usuário seleciona a opção de exclusão.
+2. Sistema solicita confirmação quando aplicável.
+3. A ideia é removida.
 
-O diagrama representa as principais interações do usuário com o sistema.
+---
 
-# 5. Modelagem do Sistema
+## 10. UC09 — Consultar anexo
 
-## 5.1 Objetivo da modelagem
+O usuário pode acessar o anexo associado à ideia.
 
-A modelagem foi utilizada para representar o funcionamento da aplicação antes e durante o desenvolvimento, facilitando a compreensão dos requisitos, das interações do usuário e da estrutura das informações.
+O acesso utiliza mecanismos de controle e links temporários.
 
-Por se tratar de uma aplicação de pequeno porte e uso pessoal, a modelagem foi mantida proporcional ao escopo do projeto.
+# 05 — Modelagem do Sistema
 
-## 5.2 Entidade principal
+## 1. Entidade principal
 
-A aplicação possui como elemento central o conceito de **Ideia/Projeto**.
+A aplicação trabalha conceitualmente com a entidade **Ideia/Projeto**.
 
-Cada registro representa uma ideia ou projeto que pode ser acompanhado ao longo de sua evolução.
+Uma ideia possui informações destinadas a representar seu ciclo de organização e acompanhamento.
 
-### Estrutura conceitual
+---
+
+## 2. Estrutura conceitual
 
 ```text
-Ideia/Projeto
+IDEIA / PROJETO
 │
-├── Título
-├── Categoria
-├── Status
-├── Prioridade
-├── Descrição
-├── Data de início
-├── Prazo
-├── Favorito
-└── Anexo
+├── id
+├── título
+├── categoria
+├── status
+├── prioridade
+├── descrição / notas
+├── data de início
+├── prazo
+├── favorito
+└── anexos
 ```
 
-## 5.3 Modelo conceitual
+---
+
+## 3. Informações da ideia
+
+### Identificação
+- ID
+- Título
+
+### Organização
+- Categoria
+- Prioridade
+- Favorito
+
+### Acompanhamento
+- Status
+- Data de início
+- Prazo
+
+### Conteúdo
+- Descrição
+- Anotações
+
+### Arquivos
+- Anexos relacionados
+
+---
+
+## 4. Status
+
+A aplicação trabalha com estados que representam a evolução da ideia.
+
+Um fluxo conceitual pode ser representado por:
 
 ```text
-┌─────────────────────────────┐
-│       IDEIA / PROJETO       │
-├─────────────────────────────┤
-│ id                          │
-│ título                      │
-│ categoria                   │
-│ status                      │
-│ prioridade                  │
-│ descrição                   │
-│ dataInicio                  │
-│ prazo                       │
-│ favorito                    │
-│ anexo                       │
-└─────────────────────────────┘
-```
-
-## 5.4 Fluxo principal
-
-```text
-              ┌───────────────┐
-              │    Usuário    │
-              └───────┬───────┘
-                      │
-                      ▼
-             ┌─────────────────┐
-             │ Abrir aplicação │
-             └────────┬────────┘
-                      │
-                      ▼
-             ┌─────────────────┐
-             │ Criar/selecionar│
-             │    registro     │
-             └────────┬────────┘
-                      │
-                      ▼
-             ┌─────────────────┐
-             │ Inserir/editar  │
-             │   informações   │
-             └────────┬────────┘
-                      │
-                      ▼
-             ┌─────────────────┐
-             │ Validar dados   │
-             └────────┬────────┘
-                      │
-                      ▼
-             ┌─────────────────┐
-             │ Salvar registro │
-             └────────┬────────┘
-                      │
-                      ▼
-             ┌─────────────────┐
-             │ Atualizar visão │
-             └─────────────────┘
-
-
-## 5.5 Estados do projeto
-
-O atributo de status representa o estágio atual da ideia:
-
 Ideia
-  │
-  ▼
-Planejando
-  │
-  ▼
+  ↓
+Planejamento
+  ↓
 Em andamento
-  │
-  ▼
+  ↓
 Concluído
-
-Pausado
-  ▲
-  │
-  └────── Pode ocorrer durante o desenvolvimento
-
-A transição entre estados é controlada pelo usuário conforme a evolução real do projeto.
-
-# 6. Arquitetura e Decisões Técnicas
-
-## 6.1 Visão arquitetural
-
-A versão atual da aplicação utiliza uma arquitetura simplificada, adequada ao escopo de uma aplicação pessoal.
-
-O processamento ocorre no ambiente do navegador, sem comunicação com um servidor próprio ou banco de dados remoto.
-
-```text
-┌─────────────────────────────┐
-│          Usuário            │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│       Interface Web         │
-│      Aplicação Front-end    │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│       Regras da aplicação   │
-│       e gerenciamento       │
-│          dos dados          │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│        LocalStorage         │
-│    Persistência local       │
-└─────────────────────────────┘
 ```
 
-## 6.2 Persistência local
+Também existe a possibilidade de manter uma ideia em estado de pausa quando necessário.
 
-O projeto utiliza o **LocalStorage** para manter os dados no navegador.
+---
 
-Essa decisão foi tomada considerando o objetivo da primeira versão:
+## 5. Separação entre dados e arquivos
 
-- uso pessoal;
-- baixo volume esperado de informações;
-- ausência de necessidade de autenticação;
-- ausência de necessidade de compartilhamento entre usuários;
-- simplicidade de implementação;
-- redução da infraestrutura necessária.
+Uma decisão importante da arquitetura foi não tratar todos os dados da mesma maneira.
 
-## 6.3 Justificativa da decisão
+### Dados das ideias
 
-A utilização de um banco de dados remoto neste momento adicionaria complexidade sem resolver uma necessidade existente no escopo inicial.
+São armazenados no navegador utilizando **LocalStorage**.
 
-A arquitetura pode posteriormente ser modificada caso surjam requisitos como:
+### Arquivos
 
-- acesso em diferentes dispositivos;
-- sincronização de dados;
-- autenticação;
-- compartilhamento;
-- backup remoto;
-- múltiplos usuários;
-- integração com APIs.
+São armazenados no **Lovable Cloud**, utilizando armazenamento privado.
 
-## 6.4 Decisões técnicas
+Essa separação permite utilizar o armazenamento local para os dados leves e uma solução específica de armazenamento para arquivos maiores.
 
-| Decisão | Justificativa |
-|---|---|
-| Aplicação web | Facilita acesso e publicação |
-| Persistência local | Adequada ao uso pessoal inicial |
-| Sem backend na primeira versão | Evita complexidade desnecessária |
-| Git/GitHub | Versionamento e documentação |
-| Vercel | Publicação da aplicação |
-| Desenvolvimento assistido por IA/low-code | Aceleração do desenvolvimento e iteração |
+---
 
-## 6.5 Limite arquitetural
+## 6. Modelagem conceitual simplificada
 
-A arquitetura atual não foi projetada para funcionar como uma plataforma multiusuário.
+```text
+┌─────────────────────────┐
+│     IDEIA / PROJETO     │
+├─────────────────────────┤
+│ id                      │
+│ título                  │
+│ categoria               │
+│ status                  │
+│ prioridade              │
+│ descrição               │
+│ data de início          │
+│ prazo                   │
+│ favorito                │
+└────────────┬────────────┘
+             │
+             │ possui
+             ▼
+┌─────────────────────────┐
+│         ANEXO           │
+├─────────────────────────┤
+│ arquivo                 │
+│ validação               │
+│ armazenamento privado   │
+│ acesso temporário       │
+└─────────────────────────┘
+```
 
-Essa limitação é intencional na primeira versão e poderá ser revista caso os requisitos sejam ampliados.
+# 06 — Arquitetura do Sistema
 
-# 7. UX/UI
+## 1. Visão geral
 
-## 7.1 Objetivo
+A aplicação utiliza uma arquitetura híbrida.
 
-A interface foi planejada com foco em simplicidade, clareza e facilidade de utilização.
+Os dados principais das ideias são armazenados localmente no navegador, enquanto os arquivos anexados utilizam infraestrutura em nuvem.
 
-Como a aplicação tem como objetivo organizar informações que podem se tornar numerosas, foi considerado importante evitar excesso de elementos visuais e informações simultâneas.
+A arquitetura foi escolhida para permitir utilização imediata sem exigir autenticação, sem abrir mão de uma solução mais adequada para armazenamento de arquivos.
 
-## 7.2 Princípios utilizados
+---
 
-### Simplicidade
+## 2. Arquitetura conceitual
 
-As principais ações devem ser facilmente identificáveis.
+```text
+                         USUÁRIO
+                            │
+                            ▼
+                 ┌────────────────────┐
+                 │      React 19      │
+                 │   TanStack Start   │
+                 └─────────┬──────────┘
+                           │
+                 ┌─────────┴─────────┐
+                 │                   │
+                 ▼                   ▼
+          DADOS DAS IDEIAS         ANEXOS
+                 │                   │
+                 ▼                   ▼
+           LocalStorage        Lovable Cloud
+                 │                   │
+                 │             ┌─────┴─────┐
+                 │             │           │
+                 │             ▼           ▼
+                 │       Cloud Storage  Server Functions
+                 │
+                 ▼
+        useSyncExternalStore
+                 │
+                 ▼
+      Sincronização entre
+      componentes e abas
+```
 
-### Clareza
+---
 
-As informações de uma ideia devem ser apresentadas de maneira organizada.
+## 3. Camada de aplicação
 
-### Intuitividade
+A aplicação utiliza:
 
-O usuário deve conseguir compreender o funcionamento da aplicação sem depender de instruções complexas.
+- React 19;
+- TanStack Start;
+- TanStack Router;
+- Vite.
 
-### Hierarquia visual
+O TanStack Router utiliza rotas baseadas em arquivos e tipagem para navegação.
 
-Informações importantes, como título, status e prioridade, devem possuir destaque adequado.
+Principais rotas:
 
-### Feedback visual
+```text
+src/routes/index.tsx
+src/routes/ideia.$id.tsx
+```
 
-A interface utiliza estados visuais para indicar ações de interação, como:
+---
 
-- hover;
-- seleção;
-- clique;
-- alteração de estado.
+## 4. Armazenamento das ideias
 
-## 7.3 Evolução da interface
+As ideias utilizam LocalStorage.
 
-Durante o desenvolvimento, decisões de interface foram ajustadas conforme a necessidade de tornar a utilização mais natural.
+O acesso é organizado pelo arquivo:
 
-Entre os pontos considerados:
+```text
+src/lib/ideas.ts
+```
 
-- posicionamento dos botões;
-- quantidade de informações apresentadas;
-- organização dos campos;
-- identificação visual de prioridade;
+A aplicação utiliza `useSyncExternalStore` para manter os componentes sincronizados com o armazenamento.
+
+Isso permite que alterações realizadas na aplicação sejam refletidas sem necessidade de recarregar manualmente a página.
+
+---
+
+## 5. Armazenamento dos anexos
+
+Os arquivos não são armazenados no LocalStorage.
+
+Eles utilizam:
+
+- Lovable Cloud;
+- Cloud Storage;
+- Server Functions.
+
+A comunicação com operações de servidor utiliza `createServerFn`.
+
+---
+
+## 6. Justificativa arquitetural
+
+A decisão de utilizar LocalStorage para as ideias está relacionada ao objetivo de permitir acesso imediato sem cadastro.
+
+Para os anexos, essa estratégia não seria adequada devido às limitações de armazenamento do navegador.
+
+Por isso, a aplicação utiliza uma arquitetura híbrida:
+
+**LocalStorage → informações das ideias**
+
+**Cloud Storage → arquivos**
+
+Essa separação é uma decisão arquitetural baseada nas características de cada tipo de dado.
+
+---
+
+## 7. Componentização
+
+A aplicação possui componentes específicos para responsabilidades da interface.
+
+Exemplo:
+
+```text
+src/components/IdeaForm.tsx
+```
+
+Esse componente concentra a interação do formulário de criação/edição.
+
+---
+
+## 8. Organização das responsabilidades
+
+```text
+Interface
+   ↓
+Componentes React
+   ↓
+Rotas / lógica da aplicação
+   ↓
+┌───────────────────┐
+│                   │
+▼                   ▼
+LocalStorage     Server Functions
+                     │
+                     ▼
+                Cloud Storage
+```
+
+# 07 — UX/UI
+
+## 1. Objetivo da interface
+
+A interface foi projetada para tornar a organização das ideias rápida e visualmente compreensível.
+
+O foco principal foi evitar uma interface excessivamente burocrática e facilitar a identificação do estado e importância de cada ideia.
+
+---
+
+## 2. Hierarquia visual
+
+A página inicial utiliza como elemento central a ideia:
+
+> “O que temos para hoje?”
+
+Essa abordagem direciona a atenção para aquilo que está disponível no momento.
+
+A ação de criação de uma nova ideia também recebeu destaque por meio do botão:
+
+**+ Nova ideia**
+
+---
+
+## 3. Categorização visual
+
+Cada categoria possui uma identificação visual própria.
+
+As cores são aplicadas de maneira suave ao cartão da ideia.
+
+A implementação utiliza `color-mix(in srgb, ...)` para produzir tonalidades suaves.
+
+A escolha evita fundos excessivamente fortes e busca preservar a legibilidade.
+
+---
+
+## 4. Prioridade
+
+As prioridades utilizam identificação visual:
+
+- **Alta:** vermelho;
+- **Média:** amarelo;
+- **Baixa:** verde.
+
+A prioridade aparece nos cartões e na página de detalhes.
+
+---
+
+## 5. Tipografia
+
+O projeto utiliza:
+
+**Bricolage Grotesque** para títulos.
+
+**DM Sans** para textos e conteúdo.
+
+A combinação foi utilizada para diferenciar títulos e informações sem comprometer a leitura.
+
+---
+
+## 6. Feedback visual
+
+A interface utiliza elementos de feedback durante interações, incluindo:
+
+- seleção de arquivos;
+- animações;
+- estados de botões;
+- indicadores de prioridade;
 - identificação de favoritos;
-- interação com os registros.
+- informações de prazo.
 
-## 7.4 Critério de UX
+---
 
-A interface deve priorizar a compreensão da informação em vez da quantidade de funcionalidades apresentadas.
+## 7. Página de detalhes
 
-Novos recursos devem ser adicionados somente quando representarem uma necessidade real para o usuário.
+Cada ideia possui uma página dedicada:
 
-# 8. Processo de Desenvolvimento
+```text
+/ideia/:id
+```
 
-## 8.1 Abordagem
+Essa página permite visualizar e editar informações mais extensas sem sobrecarregar o painel principal.
 
-O projeto foi desenvolvido de maneira incremental, partindo de uma versão mínima e evoluindo conforme novas necessidades foram identificadas.
+---
 
-O processo utilizado pode ser representado por:
+## 8. Identidade visual
+
+Foi criada uma identidade visual própria para o projeto, incluindo um favicon em pixel art representando uma lâmpada azul brilhante.
+
+A escolha está relacionada diretamente ao conceito de ideias e criatividade.
+
+# 08 — Desenvolvimento"}
+# 08 — Desenvolvimento
+
+## 1. Estratégia
+
+O desenvolvimento foi realizado de forma incremental, partindo das necessidades principais e adicionando funcionalidades conforme o projeto evoluiu.
+
+A implementação contou com assistência de ferramentas de IA/low-code, especialmente o Lovable.
+
+Essa assistência não elimina as decisões de produto e engenharia envolvidas no projeto, que incluem definição do problema, requisitos, escopo, experiência de usuário, validação das funcionalidades e decisões sobre arquitetura.
+
+---
+
+## 2. Evolução funcional
+
+A aplicação começou com o conceito central de registrar e organizar ideias.
+
+Posteriormente foram adicionadas funcionalidades como:
+
+- categorias;
+- prioridades;
+- datas;
+- prazo;
+- favoritos;
+- filtros;
+- anexos;
+- página individual;
+- melhorias de interface;
+- validação de arquivos;
+- armazenamento privado.
+
+---
+
+## 3. Formulários
+
+A aplicação utiliza:
+
+- React Hook Form;
+- Zod.
+
+O React Hook Form gerencia a interação dos formulários.
+
+O Zod é utilizado para validação estruturada dos dados.
+
+---
+
+## 4. Validação
+
+As validações abrangem informações como:
+
+- limites de caracteres;
+- regras de datas;
+- formatos de arquivo;
+- tamanho dos arquivos.
+
+As validações relacionadas aos arquivos também consideram operações no lado do servidor.
+
+---
+
+## 5. Datas
+
+O projeto utiliza:
+
+- date-fns;
+- react-day-picker.
+
+As datas são apresentadas considerando o idioma/região brasileira (`pt-BR`).
+
+---
+
+## 6. Interface
+
+A interface utiliza:
+
+- Tailwind CSS v4;
+- Radix UI;
+- shadcn/ui;
+- Lucide React.
+
+Radix UI e shadcn/ui fornecem componentes e primitivas reutilizáveis, incluindo elementos como diálogos, dropdowns, popovers e tooltips.
+
+---
+
+## 7. Arquivos principais
+
+```text
+src/
+├── routes/
+│   ├── index.tsx
+│   └── ideia.$id.tsx
+│
+├── lib/
+│   ├── ideas.ts
+│   ├── attachments.ts
+│   └── attachments.functions.ts
+│
+├── components/
+│   └── IdeaForm.tsx
+│
+└── styles.css
+```
+
+---
+
+## 8. Desenvolvimento assistido por IA
+
+O projeto foi desenvolvido com assistência de IA/low-code.
+
+A utilização dessa abordagem foi tratada como uma ferramenta de desenvolvimento, enquanto as decisões sobre:
+
+- problema;
+- funcionalidades;
+- requisitos;
+- interface;
+- organização;
+- escopo;
+- validação;
+- publicação;
+- documentação
+
+fazem parte do processo de desenvolvimento do projeto.
+
+A documentação deve deixar essa participação explícita para manter uma apresentação profissional e transparente.
+
+Uma das principais decisões foi permitir que o usuário comece a utilizar a aplicação sem necessidade de cadastro ou autenticação. Para isso, os dados das ideias são armazenados localmente no navegador, enquanto os arquivos anexados utilizam uma estrutura de armazenamento em nuvem separada.
+
+# 09 — Segurança
+
+## 1. Objetivo
+
+A segurança do projeto está principalmente relacionada à validação e ao controle de acesso aos arquivos enviados pelo usuário.
+
+Como a aplicação atualmente não exige autenticação para utilização, a arquitetura não deve ser apresentada como um sistema multiusuário com controle de identidade.
+
+---
+
+## 2. Validação de arquivos
+
+A aplicação não confia somente na extensão do arquivo.
+
+É realizada validação por **Magic Bytes**, verificando os primeiros bytes do conteúdo para identificar se o arquivo realmente corresponde ao formato esperado.
+
+São considerados formatos como:
+
+- PNG;
+- JPEG/JFIF;
+- PDF.
+
+Essa abordagem reduz o risco de aceitar arquivos cujo conteúdo não corresponde à extensão informada.
+
+---
+
+## 3. Limite de tamanho
+
+Os anexos possuem limite máximo de:
+
+**10 MB.**
+
+Essa regra evita o envio de arquivos excessivamente grandes.
+
+---
+
+## 4. Armazenamento privado
+
+Os anexos são armazenados em ambiente privado do Lovable Cloud.
+
+Eles não dependem de uma URL pública permanente.
+
+---
+
+## 5. Tokens criptográficos
+
+Cada anexo utiliza um identificador/token criptográfico de 256 bits.
+
+Esse mecanismo dificulta a descoberta de referências válidas aos arquivos.
+
+---
+
+## 6. URLs assinadas
+
+O acesso aos arquivos utiliza links assinados.
+
+Esses links possuem expiração automática após aproximadamente:
+
+**5 minutos.**
+
+Dessa maneira, o acesso ao arquivo não permanece indefinidamente disponível por meio do mesmo link.
+
+---
+
+## 7. Validação dos dados
+
+Os formulários utilizam Zod para validação estruturada.
+
+As validações relacionadas aos arquivos também são aplicadas nas operações de servidor.
+
+---
+
+## 8. Limitação atual
+
+Como as ideias são armazenadas localmente e não existe autenticação de usuários, a aplicação atual não deve ser considerada um sistema multiusuário completo.
+
+Essa limitação é conhecida e faz parte da arquitetura atual.
+
+Uma futura evolução poderá incluir autenticação e armazenamento centralizado das ideias.
+
+# 10 — Testes"}
+
+# 10 — Testes
+
+## 1. Objetivo
+
+Os testes têm como objetivo verificar se as principais funcionalidades funcionam de acordo com os requisitos definidos.
+
+É importante diferenciar:
+
+- **casos de teste definidos para validação**;
+- **testes efetivamente executados e registrados**.
+
+A documentação não deve considerar um teste como executado apenas porque foi planejado.
+
+---
+
+## 2. Testes funcionais previstos
+
+| ID | Cenário | Resultado esperado |
+|---|---|---|
+| CT01 | Criar ideia | Ideia cadastrada |
+| CT02 | Editar ideia | Informações atualizadas |
+| CT03 | Alterar status | Novo status apresentado |
+| CT04 | Alterar prioridade | Nova prioridade apresentada |
+| CT05 | Definir data | Data registrada |
+| CT06 | Definir prazo | Prazo calculado |
+| CT07 | Favoritar | Ideia aparece como favorita |
+| CT08 | Filtrar favoritos | Apenas favoritas apresentadas |
+| CT09 | Filtrar categoria | Categoria selecionada apresentada |
+| CT10 | Pesquisar ideia | Resultado correspondente apresentado |
+| CT11 | Adicionar PNG | Arquivo aceito |
+| CT12 | Adicionar JPEG/JFIF | Arquivo aceito |
+| CT13 | Adicionar PDF | Arquivo aceito |
+| CT14 | Arquivo acima de 10 MB | Arquivo rejeitado |
+| CT15 | Formato inválido | Arquivo rejeitado |
+| CT16 | Visualizar anexo | Arquivo acessível |
+| CT17 | Excluir ideia | Ideia removida |
+| CT18 | Abrir página de detalhes | Dados corretos apresentados |
+
+---
+
+## 3. Testes de interface
+
+Devem ser observados:
+
+- funcionamento dos botões;
+- abertura e fechamento de diálogos;
+- comportamento do formulário;
+- seleção de prioridade;
+- seleção de categorias;
+- favoritos;
+- feedback de anexos;
+- navegação entre páginas;
+- comportamento responsivo.
+
+---
+
+## 4. Testes de armazenamento
+
+É importante verificar:
+
+1. criação da ideia;
+2. atualização;
+3. consulta;
+4. persistência no navegador;
+5. sincronização entre componentes;
+6. comportamento entre abas.
+
+---
+
+## 5. Testes de segurança dos anexos
+
+Os principais cenários são:
+
+- arquivo válido;
+- extensão incompatível com o conteúdo;
+- arquivo inválido;
+- arquivo acima do limite;
+- tentativa de acesso ao arquivo por link expirado.
+
+---
+
+## 6. Teste em produção
+
+Como a aplicação está publicada, também é relevante realizar testes utilizando a versão disponível em:
+
+https://app-project-ideias.vercel.app/
+
+Esses testes devem validar o comportamento da aplicação fora do ambiente de desenvolvimento.
+
+---
+
+## 7. Registro dos testes
+
+Para uma evolução futura do projeto, recomenda-se registrar:
+
+- data;
+- versão;
+- cenário;
+- resultado;
+- comportamento encontrado;
+- correção aplicada.
+
+Isso permite transformar testes manuais em histórico de qualidade do projeto.
+
+# 11 — Versionamento
+
+## 1. Repositório
+
+O projeto utiliza Git e GitHub para versionamento e armazenamento do código-fonte.
+
+O versionamento permite acompanhar a evolução da aplicação e manter histórico das alterações.
+
+---
+
+## 2. Objetivos do versionamento
+
+O uso do Git permite:
+
+- registrar alterações;
+- recuperar versões anteriores;
+- acompanhar evolução;
+- organizar modificações;
+- manter o código disponível remotamente;
+- integrar o desenvolvimento ao processo de publicação.
+
+---
+
+## 3. Fluxo conceitual
+
+```text
+Alteração
+   ↓
+Desenvolvimento
+   ↓
+Validação
+   ↓
+Commit
+   ↓
+GitHub
+   ↓
+Publicação
+```
+
+---
+
+## 4. Boas práticas
+
+Como evolução do projeto, recomenda-se utilizar mensagens de commit claras e relacionadas à alteração realizada.
+
+Exemplos:
+
+```text
+feat: adicionar sistema de favoritos
+fix: corrigir cálculo de prazo
+feat: adicionar suporte a anexos
+style: ajustar identidade visual
+docs: atualizar documentação
+```
+
+Esses exemplos representam uma recomendação de organização e não devem ser tratados como histórico real caso determinada convenção não tenha sido utilizada durante o desenvolvimento.
+
+---
+
+## 5. Repositório como documentação
+
+Além de armazenar o código, o GitHub funciona como parte da apresentação técnica do projeto, reunindo:
+
+- código;
+- README;
+- documentação;
+- histórico de alterações;
+- informações técnicas.
+
+- # 12 — Deploy e Publicação
+
+## 1. Publicação
+
+A aplicação foi publicada utilizando a infraestrutura de publicação associada ao projeto, com disponibilidade por meio da Vercel.
+
+**Aplicação:**
+
+https://app-project-ideias.vercel.app/
+
+---
+
+## 2. Serviços utilizados
+
+É importante separar os serviços conforme sua responsabilidade.
+
+### Vercel
+
+Responsável pela disponibilização/publicação da aplicação web.
+
+### Lovable Cloud
+
+Utilizado para recursos relacionados aos anexos e operações de servidor.
+
+Inclui:
+
+- Cloud Storage;
+- Server Functions.
+
+---
+
+## 3. Arquitetura de publicação
+
+A visão simplificada é:
+
+```text
+                    USUÁRIO
+                       │
+                       ▼
+               Aplicação publicada
+                    Vercel
+                       │
+          ┌────────────┴────────────┐
+          │                         │
+          ▼                         ▼
+   Dados locais                 Anexos
+   LocalStorage             Lovable Cloud
+                                    │
+                           ┌────────┴────────┐
+                           ▼                 ▼
+                    Cloud Storage     Server Functions
+```
+
+---
+
+## 4. Homologação
+
+Antes de considerar uma alteração concluída, recomenda-se verificar:
+
+- criação de ideias;
+- edição;
+- filtros;
+- favoritos;
+- datas;
+- anexos;
+- exclusão;
+- navegação;
+- comportamento responsivo.
+
+---
+
+## 5. Produção
+
+Após a publicação, a versão disponível no endereço da aplicação representa o ambiente de produção do projeto.
+
+Alterações futuras devem ser validadas antes de serem consideradas estáveis.
+
+# 13 — Resultados do Projeto
+
+## 1. Resultado funcional
+
+O projeto resultou em uma aplicação web funcional para organização de ideias e projetos.
+
+A aplicação permite centralizar informações que anteriormente poderiam estar espalhadas em diferentes locais.
+
+---
+
+## 2. Funcionalidades implementadas
+
+Entre as principais funcionalidades estão:
+
+- criação de ideias;
+- edição;
+- exclusão;
+- categorias;
+- prioridades;
+- status;
+- datas;
+- cálculo de prazo;
+- favoritos;
+- pesquisa;
+- filtros;
+- descrição e anotações;
+- anexos;
+- página individual;
+- visualização de arquivos;
+- interface responsiva.
+
+---
+
+## 3. Resultado técnico
+
+O projeto também permitiu aplicar conceitos relacionados a:
+
+- React;
+- arquitetura de aplicações web;
+- roteamento;
+- componentização;
+- gerenciamento de estado;
+- armazenamento local;
+- armazenamento em nuvem;
+- funções de servidor;
+- validação de dados;
+- validação de arquivos;
+- segurança;
+- UX/UI;
+- Git/GitHub;
+- publicação de aplicações.
+
+---
+
+## 4. Resultado de Engenharia de Software
+
+Além do resultado visual, o projeto passou a ser estruturado considerando um processo de engenharia:
 
 ```text
 Problema
@@ -668,317 +1237,19 @@ Objetivos
    ↓
 Requisitos
    ↓
+Casos de uso
+   ↓
 Modelagem
+   ↓
+Arquitetura
    ↓
 UX/UI
    ↓
 Desenvolvimento
    ↓
-Validação
-   ↓
-Ajustes
-   ↓
-Documentação
-   ↓
-Versionamento
-   ↓
-Deploy
-```
-
-## 8.2 Primeira versão
-
-A primeira versão concentrou-se nas informações essenciais:
-
-- título;
-- categoria;
-- status;
-- descrição;
-- anexo.
-
-## 8.3 Evolução
-
-Após analisar a utilização da aplicação, foram identificadas necessidades adicionais.
-
-Foram acrescentados:
-
-- prioridade;
-- data de início;
-- prazo;
-- favoritos.
-
-Essa evolução permitiu que a aplicação deixasse de apenas registrar ideias e passasse também a auxiliar no acompanhamento delas.
-
-## 8.4 Desenvolvimento assistido
-
-A implementação contou com uma abordagem de desenvolvimento assistido por IA/low-code.
-
-Nesse processo, a ferramenta foi utilizada como apoio à implementação, enquanto as decisões relacionadas ao problema, requisitos, funcionalidades, experiência do usuário, escopo e evolução do produto foram definidas durante o desenvolvimento.
-
-## 8.5 Validação incremental
-
-As funcionalidades foram avaliadas ao longo do desenvolvimento para identificar:
-
-- comportamentos inesperados;
-- problemas de interface;
-- necessidade de ajustes;
-- inconsistências;
-- melhorias de usabilidade.
-
-O processo permitiu corrigir e ajustar a aplicação antes da publicação.
-
-# 9. Segurança
-
-## 9.1 Objetivo
-
-Mesmo sendo uma aplicação pessoal sem backend, foram consideradas boas práticas básicas de segurança durante o desenvolvimento.
-
-## 9.2 Validação de entradas
-
-Os dados fornecidos pelo usuário devem ser tratados e validados antes de serem utilizados pela aplicação.
-
-A validação busca reduzir problemas causados por entradas inesperadas ou inválidas.
-
-## 9.3 Upload de arquivos
-
-Os anexos possuem restrições de formato e tamanho.
-
-Formatos previstos:
-
-- PNG;
-- JFIF;
-- PDF.
-
-Tamanho máximo:
-
-- 10 MB.
-
-## 9.4 Armazenamento local
-
-Como os dados são armazenados no navegador, é importante considerar que o LocalStorage não deve ser utilizado para informações que necessitem de proteção elevada.
-
-A aplicação não deve armazenar:
-
-- senhas;
-- tokens secretos;
-- chaves privadas;
-- credenciais;
-- informações sensíveis que necessitem de proteção adicional.
-
-## 9.5 Front-end
-
-A aplicação deve evitar a inserção insegura de conteúdo fornecido pelo usuário diretamente na estrutura HTML.
-
-Também devem ser consideradas:
-
-- validação de entradas;
-- tratamento de erros;
-- validação de arquivos;
-- atualização de dependências;
-- proteção contra comportamentos inesperados.
-
-## 9.6 Limitações
-
-A versão atual não possui autenticação, controle de acesso ou backend.
-
-Consequentemente, os mecanismos de segurança disponíveis são compatíveis com uma aplicação pessoal executada no navegador e não com um sistema multiusuário de produção.
-
-Caso a arquitetura evolua para backend, deverão ser introduzidos mecanismos adicionais de segurança.
-
-# 10. Testes e Validação
-
-## 10.1 Objetivo
-
-Os testes têm como objetivo verificar se as principais funcionalidades da aplicação apresentam o comportamento esperado e identificar problemas antes e após a publicação.
-
-## 10.2 Estratégia
-
-Para o escopo atual, a validação concentra-se principalmente em testes funcionais e testes de comportamento da interface.
-
-## 10.3 Casos de teste
-
-| ID | Cenário | Resultado esperado |
-|---|---|---|
-| CT01 | Criar ideia válida | Registro criado |
-| CT02 | Editar ideia | Informações atualizadas |
-| CT03 | Alterar status | Novo status apresentado |
-| CT04 | Alterar prioridade | Nova prioridade apresentada |
-| CT05 | Definir data | Data registrada |
-| CT06 | Definir prazo | Prazo registrado |
-| CT07 | Favoritar item | Item identificado como favorito |
-| CT08 | Remover favorito | Item deixa de ser favorito |
-| CT09 | Adicionar anexo válido | Arquivo aceito |
-| CT10 | Adicionar arquivo inválido | Arquivo rejeitado |
-| CT11 | Adicionar arquivo acima do limite | Arquivo rejeitado |
-| CT12 | Excluir registro | Registro removido |
-| CT13 | Recarregar página | Dados permanecem disponíveis |
-| CT14 | Utilizar interface | Elementos principais respondem corretamente |
-| CT15 | Acessar aplicação publicada | Aplicação carrega corretamente |
-
-## 10.4 Validação pós-deploy
-
-Após a publicação, a aplicação deve ser acessada pelo ambiente de produção para verificar:
-
-- carregamento inicial;
-- funcionamento das principais funcionalidades;
-- persistência;
-- comportamento da interface;
-- anexos;
-- ausência de erros críticos.
-
-## 10.5 Critério de aprovação
-
-Uma funcionalidade é considerada validada quando apresenta o comportamento esperado no cenário correspondente e não interfere negativamente nas funcionalidades existentes.
-
-## 10.6 Observação
-
-Os casos acima representam a estratégia de testes/documentação do projeto. A documentação não deve afirmar que todos foram executados formalmente caso isso ainda não tenha ocorrido.
-
-# 11. Versionamento
-
-## 11.1 Objetivo
-
-O versionamento permite acompanhar a evolução do projeto e manter um histórico das alterações realizadas durante seu desenvolvimento.
-
-## 11.2 Ferramenta
-
-O projeto utiliza **Git** para controle de versão e **GitHub** para hospedagem do repositório.
-
-## 11.3 Objetivos do versionamento
-
-- registrar alterações;
-- acompanhar evolução;
-- facilitar recuperação de versões;
-- documentar mudanças;
-- manter o código centralizado;
-- possibilitar publicação e colaboração futura.
-
-## 11.4 Fluxo simplificado
-
-```text
-Alteração
-   ↓
-Validação local
-   ↓
-Commit
-   ↓
-Push
-   ↓
-GitHub
-   ↓
-Deploy
-```
-
-## 11.5 Boas práticas consideradas
-
-Os commits devem, preferencialmente, representar alterações específicas e compreensíveis.
-
-Exemplos:
-
-```text
-feat: adiciona controle de prioridade
-feat: adiciona campo de prazo
-fix: corrige persistência dos registros
-fix: ajusta validação de anexos
-docs: atualiza documentação
-style: ajusta interface dos cards
-```
-
-A nomenclatura acima pode ser utilizada como padrão para manter o histórico mais organizado.
-
-# 12. Deploy e Publicação
-
-## 12.1 Objetivo
-
-Disponibilizar a aplicação em um ambiente acessível pela internet para utilização e validação.
-
-## 12.2 Versionamento
-
-O código do projeto é mantido em um repositório GitHub.
-
-## 12.3 Plataforma de hospedagem
-
-A aplicação foi publicada utilizando a **Vercel**.
-
-## 12.4 Fluxo de publicação
-
-```text
-Desenvolvimento
-      ↓
-Validação
-      ↓
-Git
-      ↓
-GitHub
-      ↓
-Vercel
-      ↓
-Aplicação publicada
-```
-
-## 12.5 Ambiente publicado
-
-A aplicação encontra-se disponível em:
-
-[Organizador de Ideias e Projetos — Aplicação publicada](https://app-project-ideias.vercel.app/?utm_source=chatgpt.com)
-
-## 12.6 Validação após publicação
-
-O ambiente publicado deve ser utilizado para validar o comportamento da aplicação fora do ambiente local.
-
-Devem ser observados:
-
-- carregamento da aplicação;
-- funcionamento das funcionalidades;
-- persistência dos dados;
-- comportamento dos anexos;
-- interface;
-- erros no navegador.
-
-## 12.7 Consideração
-
-O projeto não utiliza domínio personalizado, pois a URL fornecida pela plataforma atende ao objetivo do projeto pessoal.
-
-# 13. Resultados do Projeto
-
-## 13.1 Resultado funcional
-
-Foi desenvolvida e publicada uma aplicação web capaz de organizar ideias e projetos pessoais.
-
-A aplicação permite registrar informações relacionadas a cada ideia e acompanhar sua evolução por meio de status, prioridade e datas.
-
-## 13.2 Resultado técnico
-
-O projeto proporcionou a aplicação prática de conceitos relacionados a:
-
-- levantamento de requisitos;
-- definição de escopo;
-- modelagem;
-- casos de uso;
-- UX/UI;
-- desenvolvimento web;
-- persistência local;
-- validação;
-- segurança básica;
-- controle de versão;
-- documentação;
-- publicação de aplicação web.
-
-## 13.3 Resultado de Engenharia de Software
-
-Além da implementação da aplicação, o projeto foi estruturado considerando o ciclo de desenvolvimento de software:
-
-```text
-Problema
-   ↓
-Requisitos
-   ↓
-Modelagem
-   ↓
-Implementação
+Segurança
    ↓
 Testes
-   ↓
-Documentação
    ↓
 Versionamento
    ↓
@@ -987,255 +1258,534 @@ Deploy
 Evolução
 ```
 
-Isso permite que o projeto seja apresentado não apenas como uma aplicação desenvolvida, mas como um exercício prático de Engenharia de Software.
-
-## 13.4 Resultado do produto
-
-A versão atual atende ao objetivo inicial de centralizar e organizar ideias, mantendo a solução simples e adequada ao uso pessoal.
-
-O projeto também possui espaço para evolução futura sem exigir que funcionalidades complexas sejam introduzidas prematuramente.
-
-# 14. Limitações Conhecidas
-
-## 14.1 Persistência local
-
-Os dados são armazenados no navegador utilizando LocalStorage.
-
-Isso significa que os dados não são automaticamente sincronizados entre dispositivos.
-
-## 14.2 Ausência de backend
-
-A versão atual não possui servidor próprio ou API.
-
-Consequentemente, funcionalidades que dependem de processamento ou armazenamento remoto ainda não fazem parte do escopo atual.
-
-## 14.3 Ausência de autenticação
-
-A aplicação não possui sistema de login ou gerenciamento de usuários.
-
-## 14.4 Uso individual
-
-A arquitetura atual foi pensada para utilização individual.
-
-Não existe atualmente um mecanismo para:
-
-- compartilhamento de projetos;
-- colaboração em tempo real;
-- permissões de acesso;
-- múltiplos usuários.
-
-## 14.5 Backup
-
-Como os dados estão associados ao armazenamento local do navegador, não existe um mecanismo de backup remoto integrado na versão atual.
-
-## 14.6 Escalabilidade
-
-A arquitetura atual é suficiente para o propósito inicial, mas precisaria ser modificada caso o projeto evolua para um produto utilizado por muitos usuários ou com grande volume de dados.
-
-## 14.7 Consideração
-
-As limitações apresentadas não representam necessariamente falhas do projeto. Elas são consequências das decisões de escopo e arquitetura adotadas para a primeira versão.
-
-# 15. Evolução e Roadmap
-
-## 15.1 Objetivo
-
-O roadmap apresenta possíveis evoluções da aplicação a partir das limitações e necessidades que podem surgir no futuro.
-
-As funcionalidades abaixo não fazem parte necessariamente da versão atual. Elas representam possibilidades de evolução.
+Essa estrutura transforma o projeto de uma simples aplicação desenvolvida para demonstração em um caso de estudo de desenvolvimento de software.
 
 ---
 
-## 15.2 Curto prazo — Organização
+## 5. Resultado profissional
 
-### Checklist
+O projeto demonstra capacidade de participar de um processo de desenvolvimento envolvendo:
 
-Permitir que cada ideia ou projeto possua uma lista de tarefas internas.
+- identificação de problema;
+- definição de requisitos;
+- tomada de decisões técnicas;
+- construção de interface;
+- organização de código;
+- validação;
+- preocupação com segurança;
+- versionamento;
+- publicação;
+- documentação;
+- planejamento de evolução.
 
-Exemplo:
+- # 14 — Limitações do Projeto
 
-```text
-Projeto: Criar portfólio
+## 1. Armazenamento local das ideias
 
-☑ Criar estrutura
-☑ Desenvolver página inicial
-☐ Adicionar projetos
-☐ Publicar
-```
+Atualmente, as informações principais das ideias são armazenadas no LocalStorage do navegador.
 
-### Tags
-
-Adicionar etiquetas personalizadas para facilitar a classificação.
-
-### Busca
-
-Permitir localizar ideias pelo título, descrição, categoria ou tags.
-
-### Filtros
-
-Adicionar filtros combinados por:
-
-- categoria;
-- status;
-- prioridade;
-- favorito.
+Isso significa que os dados não constituem uma base de dados centralizada acessível de qualquer dispositivo.
 
 ---
 
-## 15.3 Médio prazo — Estrutura de dados
+## 2. Ausência de autenticação
 
-### Backend
+A aplicação não possui atualmente um sistema completo de:
 
-Substituir ou complementar o LocalStorage com uma API.
+- cadastro;
+- login;
+- senha;
+- recuperação de conta;
+- controle de identidade.
 
-Possíveis responsabilidades:
+Essa decisão está relacionada ao objetivo de permitir utilização imediata sem barreira de autenticação.
 
-- armazenamento centralizado;
+---
+
+## 3. Ausência de sincronização entre dispositivos
+
+Como os dados das ideias são armazenados localmente, uma ideia criada em um dispositivo não é automaticamente disponibilizada em outro.
+
+---
+
+## 4. Escalabilidade limitada para dados das ideias
+
+O armazenamento local atende ao objetivo atual do projeto, mas não é a melhor solução para uma aplicação que futuramente precise suportar:
+
+- muitos usuários;
+- grande volume de dados;
+- colaboração;
 - sincronização;
-- gerenciamento de dados;
-- integração com outros serviços.
-
-### Banco de dados
-
-Adicionar banco de dados para persistência remota.
-
-### Autenticação
-
-Permitir criação de contas e acesso individual aos projetos.
-
-### Backup
-
-Implementar mecanismos de backup e recuperação dos dados.
+- histórico centralizado.
 
 ---
 
-## 15.4 Médio/longo prazo — Automação
+## 5. Dependência de serviços externos
 
-A aplicação poderá evoluir para auxiliar não apenas no armazenamento das ideias, mas também na execução e acompanhamento dos projetos.
+Os anexos dependem do Lovable Cloud para armazenamento e operações relacionadas.
 
-Possibilidades:
-
-- lembretes de prazo;
-- notificações;
-- criação automática de tarefas;
-- atualização automática de status;
-- integração com calendário;
-- automações baseadas em eventos.
+A aplicação publicada também depende da infraestrutura utilizada para hospedagem.
 
 ---
 
-## 15.5 Longo prazo — Inteligência Artificial
+## 6. Escopo atual
 
-Uma possível evolução é incorporar recursos de IA para auxiliar o usuário na organização e desenvolvimento das ideias.
+O projeto é voltado para uso pessoal e não foi projetado atualmente como uma plataforma colaborativa.
 
-Exemplos:
+Por isso, funcionalidades como:
 
-### Sugestão de estrutura
+- compartilhamento;
+- colaboração em tempo real;
+- múltiplos usuários;
+- permissões;
+- equipes;
+- auditoria
 
-A IA poderia analisar uma ideia e sugerir:
+não fazem parte do escopo atual.
 
-- objetivo;
-- etapas;
-- possíveis tarefas;
-- prioridades;
-- riscos;
-- próximos passos.
+---
 
-### Transformação de ideia em plano
+## 7. Natureza do projeto
 
-Exemplo:
+O projeto foi desenvolvido como projeto pessoal e de portfólio.
+
+Ele não deve ser apresentado como um sistema corporativo de larga escala.
+
+Suas decisões arquiteturais devem ser avaliadas dentro do contexto do problema que pretende resolver.
+
+# 15 — Evolução e Roadmap
+
+## 1. Objetivo
+
+O roadmap representa possíveis evoluções do projeto a partir das limitações e necessidades identificadas na versão atual.
+
+As funcionalidades abaixo são propostas de evolução e não devem ser apresentadas como funcionalidades já implementadas.
+
+---
+
+## 2. Curto prazo
+
+### Organização
+
+- [ ] adicionar tags;
+- [ ] ampliar filtros;
+- [ ] melhorar pesquisa;
+- [ ] permitir ordenação personalizada;
+- [ ] criar filtros combinados.
+
+### Experiência
+
+- [ ] melhorar feedback das ações;
+- [ ] aprimorar responsividade;
+- [ ] adicionar mais estados visuais;
+- [ ] melhorar acessibilidade.
+
+---
+
+## 3. Médio prazo
+
+### Persistência centralizada
+
+Evoluir o armazenamento das ideias para uma base de dados centralizada.
+
+Arquitetura futura:
 
 ```text
-Entrada:
-
-"Quero criar um site para uma loja de roupas."
-
-        ↓
-
-IA
-
-        ↓
-
-Objetivo
-Público-alvo
-Funcionalidades
-Tarefas
-Tecnologias
-Cronograma
-Próximos passos
+Usuário
+   ↓
+Frontend
+   ↓
+Backend / API
+   ↓
+Banco de dados
 ```
 
-### Sugestões contextuais
+Isso permitiria:
 
-A aplicação poderia identificar ideias semelhantes e sugerir relações entre projetos existentes.
+- sincronização entre dispositivos;
+- persistência centralizada;
+- histórico;
+- autenticação;
+- maior capacidade de crescimento.
 
 ---
 
-## 15.6 Possível evolução arquitetural
+## 4. Autenticação
+
+Adicionar:
+
+- cadastro;
+- login;
+- recuperação de acesso;
+- sessão de usuário;
+- controle de propriedade das ideias.
+
+---
+
+## 5. Sincronização
+
+Com autenticação e banco centralizado, as ideias poderiam ser sincronizadas entre:
+
+- computador;
+- celular;
+- outros dispositivos.
+
+---
+
+## 6. Gestão avançada
+
+Possíveis funcionalidades:
+
+- subtarefas;
+- checklist;
+- comentários;
+- histórico de alterações;
+- atividades;
+- etiquetas;
+- arquivamento;
+- projetos relacionados.
+
+---
+
+## 7. Automação
+
+Possíveis automações futuras:
+
+- lembretes;
+- notificações de prazo;
+- criação automática de tarefas;
+- acompanhamento de projetos parados;
+- resumos periódicos.
+
+---
+
+## 8. Inteligência Artificial
+
+Uma futura integração com IA poderia permitir:
+
+- transformar uma ideia em plano de ação;
+- sugerir tarefas;
+- resumir anotações;
+- identificar prioridades;
+- sugerir categorias;
+- gerar checklists;
+- identificar projetos semelhantes.
+
+---
+
+## 9. Evolução arquitetural
 
 A arquitetura poderia evoluir de:
 
 ```text
-Versão atual
+VERSÃO ATUAL
 
-Front-end
-    ↓
-LocalStorage
+Frontend
+ ├── LocalStorage → ideias
+ └── Lovable Cloud → anexos
 ```
 
 para:
 
 ```text
-Evolução
+VERSÃO FUTURA
 
-Front-end
-    ↓
-API / Backend
-    ↓
-Banco de dados
-```
-
-E posteriormente:
-
-```text
-Aplicação
-    ↓
-API
-    ├── Banco de dados
-    ├── Autenticação
-    ├── Automação
-    └── Serviço de IA
+Frontend
+      │
+      ▼
+Backend / API
+      │
+ ┌────┴─────┐
+ ▼          ▼
+Banco      Storage
+de dados   de arquivos
+      │
+      ▼
+Autenticação
 ```
 
 ---
 
-## 15.7 Roadmap resumido
+## 10. Visão de longo prazo
 
-| Fase | Evolução | Status |
+O projeto pode evoluir de um organizador pessoal para uma plataforma completa de gestão de ideias e projetos.
+
+Entretanto, essa evolução deve ocorrer conforme surgir necessidade real, evitando adicionar complexidade sem benefício correspondente.
+
+A principal premissa do roadmap é:
+
+**evoluir a arquitetura conforme os requisitos evoluem.**
+
+# 16 — Stack Tecnológica e Estrutura do Projeto
+
+## 1. Stack
+
+### Framework
+
+**TanStack Start v1**
+
+Framework full-stack utilizado sobre React 19, oferecendo recursos de aplicação web moderna, SSR/Edge e roteamento tipado.
+
+### Frontend
+
+**React 19**
+
+Utilizado para construção da interface e componentes da aplicação.
+
+### Build
+
+**Vite 7**
+
+Responsável pelo processo de desenvolvimento e build da aplicação.
+
+### Roteamento
+
+**TanStack Router**
+
+Utiliza roteamento baseado em arquivos e tipagem.
+
+Principais rotas:
+
+```text
+src/routes/index.tsx
+src/routes/ideia.$id.tsx
+```
+
+### Estilização
+
+**Tailwind CSS v4**
+
+Utilizado para construção da interface.
+
+O projeto também utiliza variáveis de cor em OKLCH.
+
+### Componentes
+
+**Radix UI + shadcn/ui**
+
+Utilizados como base para componentes e primitivas acessíveis.
+
+### Formulários
+
+**React Hook Form**
+
+Utilizado no gerenciamento de formulários.
+
+### Validação
+
+**Zod**
+
+Utilizado para validação estruturada dos dados.
+
+### Datas
+
+**date-fns + react-day-picker**
+
+Utilizados para manipulação e seleção de datas.
+
+### Ícones
+
+**Lucide React**
+
+Utilizado para os ícones da interface.
+
+---
+
+# 2. Armazenamento
+
+## LocalStorage
+
+Utilizado para os dados principais das ideias.
+
+A aplicação utiliza `useSyncExternalStore` para integrar o armazenamento ao estado observado pelos componentes.
+
+---
+
+## Lovable Cloud
+
+Utilizado para funcionalidades relacionadas aos anexos.
+
+Inclui:
+
+- Cloud Storage;
+- Server Functions.
+
+---
+
+# 3. Principais arquivos
+
+```text
+src/
+│
+├── routes/
+│   ├── index.tsx
+│   └── ideia.$id.tsx
+│
+├── lib/
+│   ├── ideas.ts
+│   ├── attachments.ts
+│   └── attachments.functions.ts
+│
+├── components/
+│   └── IdeaForm.tsx
+│
+└── styles.css
+```
+
+---
+
+# 4. Responsabilidade dos arquivos
+
+### `src/routes/index.tsx`
+
+Responsável pela página inicial.
+
+Concentra recursos como:
+
+- pesquisa;
+- filtros;
+- favoritos;
+- categorias;
+- listagem;
+- criação de ideias.
+
+### `src/routes/ideia.$id.tsx`
+
+Responsável pela página individual da ideia.
+
+Inclui:
+
+- detalhes;
+- edição;
+- status;
+- notas;
+- anexos;
+- exclusão.
+
+### `src/lib/ideas.ts`
+
+Concentra a lógica relacionada às ideias, incluindo:
+
+- armazenamento;
+- categorias;
+- prioridades;
+- regras de prazo.
+
+### `src/lib/attachments.ts`
+
+Responsável por funcionalidades relacionadas aos anexos no lado da aplicação.
+
+### `src/lib/attachments.functions.ts`
+
+Concentra operações relacionadas aos anexos executadas por funções de servidor.
+
+### `src/components/IdeaForm.tsx`
+
+Componente responsável pelo formulário de criação/edição.
+
+### `src/styles.css`
+
+Concentra estilos globais, identidade visual, tipografia e classes relacionadas aos efeitos visuais.
+
+---
+
+# 5. Matriz de decisões técnicas
+
+| Necessidade | Decisão | Tecnologia |
 |---|---|---|
-| V1 | Cadastro e organização de ideias | ✅ Concluído |
-| V1 | Categorias e status | ✅ Concluído |
-| V1 | Prioridade | ✅ Concluído |
-| V1 | Datas e prazo | ✅ Concluído |
-| V1 | Favoritos | ✅ Concluído |
-| V1 | Anexos | ✅ Concluído |
-| V1 | Persistência local | ✅ Concluído |
-| V1 | GitHub | ✅ Concluído |
-| V1 | Deploy | ✅ Concluído |
-| V2 | Checklist | 🔲 Futuro |
-| V2 | Tags | 🔲 Futuro |
-| V2 | Busca e filtros avançados | 🔲 Futuro |
-| V3 | Backend | 🔲 Futuro |
-| V3 | Banco de dados | 🔲 Futuro |
-| V3 | Autenticação | 🔲 Futuro |
-| V3 | Sincronização | 🔲 Futuro |
-| V4 | Automações | 🔲 Futuro |
-| V5 | Recursos de IA | 🔲 Futuro |
+| Acesso imediato | Não exigir login inicialmente | LocalStorage |
+| Armazenar ideias | Persistência local | LocalStorage |
+| Atualização reativa | Sincronização de armazenamento | `useSyncExternalStore` |
+| Armazenar arquivos | Utilizar armazenamento específico | Lovable Cloud |
+| Arquivos privados | Storage privado | Cloud Storage |
+| Operações de servidor | Processamento controlado | Server Functions |
+| Validar dados | Schema estruturado | Zod |
+| Gerenciar formulários | Estado/validação de formulário | React Hook Form |
+| Validar arquivos | Verificar conteúdo real | Magic Bytes |
+| Proteger acesso aos arquivos | URLs temporárias | Signed URLs |
+| Limitar arquivos | Controle de tamanho | 10 MB |
+| Navegação tipada | Rotas estruturadas | TanStack Router |
+| Interface | Estilização utilitária | Tailwind CSS |
+| Componentes acessíveis | Primitivas reutilizáveis | Radix UI / shadcn/ui |
+| Datas | Manipulação de datas | date-fns |
+| Seleção de datas | Componente de calendário | react-day-picker |
+| Ícones | Biblioteca de ícones | Lucide React |
 
-## 15.8 Princípio de evolução
+---
 
-A evolução do projeto deve seguir a necessidade do produto.
+# 6. Decisões arquiteturais
 
-Novas tecnologias ou funcionalidades não devem ser adicionadas apenas para aumentar a complexidade técnica. Cada evolução deve possuir uma finalidade clara e resolver um problema identificado.
+As principais decisões do projeto podem ser resumidas em:
 
-Dessa forma, o projeto pode crescer gradualmente de uma aplicação pessoal simples para uma solução mais completa de organização, planejamento e execução de projetos.
+### Decisão 1 — LocalStorage para ideias
+
+**Problema:** necessidade de utilização rápida sem login.
+
+**Decisão:** armazenar as ideias localmente.
+
+**Resultado:** aplicação pode ser utilizada imediatamente sem depender de autenticação ou de uma requisição de rede para carregar os dados principais.
+
+---
+
+### Decisão 2 — Cloud Storage para anexos
+
+**Problema:** arquivos como PDFs e imagens não são adequados para serem armazenados indefinidamente no LocalStorage.
+
+**Decisão:** utilizar armazenamento privado em nuvem.
+
+**Resultado:** os arquivos possuem uma infraestrutura própria de armazenamento.
+
+---
+
+### Decisão 3 — Magic Bytes
+
+**Problema:** uma extensão de arquivo pode ser alterada sem modificar o conteúdo real.
+
+**Decisão:** verificar os primeiros bytes do arquivo.
+
+**Resultado:** a aplicação não depende exclusivamente da extensão informada pelo usuário.
+
+---
+
+### Decisão 4 — URLs assinadas
+
+**Problema:** disponibilizar arquivos privados sem manter um link público permanente.
+
+**Decisão:** utilizar URLs assinadas com expiração.
+
+**Resultado:** o acesso ao arquivo é temporário.
+
+---
+
+### Decisão 5 — Interface visual por categorias
+
+**Problema:** identificar rapidamente diferentes tipos de ideias.
+
+**Decisão:** utilizar tonalidades associadas às categorias.
+
+**Resultado:** maior diferenciação visual sem utilizar fundos excessivamente fortes.
+
+---
+
+# 7. Resumo técnico
+
+O projeto combina uma aplicação React moderna com armazenamento local e serviços de nuvem.
+
+Sua característica arquitetural principal é a separação entre:
+
+```text
+DADOS DE NEGÓCIO DA IDEIA
+          ↓
+     LocalStorage
+
+
+ARQUIVOS / ANEXOS
+          ↓
+     Lovable Cloud
+          ↓
+ ┌────────┴────────┐
+ ▼                 ▼
+Storage       Server Functions
+```
+
+Essa arquitetura foi escolhida para atender às necessidades atuais do projeto sem introduzir autenticação e banco de dados centralizado antes que esses recursos fossem necessários.
