@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { actions, dueLabel, PRIORITIES, STATUSES, useStore, type Idea, type Priority, type Status } from "@/lib/ideas";
+import { actions, daysLeft, dueLabel, PRIORITIES, STATUSES, useStore, type Idea, type Priority, type Status } from "@/lib/ideas";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -188,10 +188,11 @@ export function StatusDot({ status }: { status: Status }) {
   );
 }
 
-function DateField({ label, value, onChange, optional, min }: { label: string; value?: string | undefined; onChange: (v: string | undefined) => void; optional?: boolean; min?: string }) {
+function DateField({ label, value, onChange, optional, min, due }: { label: string; value?: string | undefined; onChange: (v: string | undefined) => void; optional?: boolean; min?: string; due?: string | undefined }) {
   const [open, setOpen] = useState(false);
   const toDate = (v: string) => { const [y, m, d] = v.split("-").map(Number); return new Date(y!, m! - 1, d!); };
   const selected = value ? toDate(value) : undefined;
+  const left = due ? daysLeft(due) : null;
   return (
     <div className="field-group space-y-1.5">
       <Label>{label} {optional && <span className="font-normal text-muted-foreground">(opcional)</span>}</Label>
