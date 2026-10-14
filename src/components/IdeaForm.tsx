@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,6 +44,27 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
   const [file, setFile] = useState<File | null>(null);
   const [attachment, setAttachment] = useState(idea?.attachment);
   const [saving, setSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [dragOver, setDragOver] = useState(false);
+  const canDragRef = useRef(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const update = () => { canDragRef.current = mq.matches; };
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const pickFile = async (selected: File | undefined) => {
+    if (!selected) return;
+    try {
+      await validateAttachment(selected);
+      setFile(selected);
+    } catch (error) {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      toast.error(error instanceof Error ? error.message : "Arquivo inválido.");
+    }
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
