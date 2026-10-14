@@ -158,8 +158,9 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
               className={cn("field-control flex min-h-12 cursor-pointer items-center justify-center rounded-md border border-dashed text-center text-sm font-medium", dragOver && "border-destructive bg-destructive/10")}
             >
               <Input id="attachment" ref={fileInputRef} type="file" accept=".png,.jfif,.pdf,image/png,image/jpeg,application/pdf" disabled={saving} className="sr-only" onChange={async (e) => {
-                await pickFile(e.currentTarget.files?.[0]);
-                e.currentTarget.value = "";
+                const input = e.currentTarget;
+                await pickFile(input.files?.[0]);
+                input.value = "";
               }} />
               Escolher arquivo(s)
             </label>
