@@ -137,8 +137,8 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <DateField label="Data de início" value={startDate} onChange={(v) => v && setStartDate(v)} />
-            <DateField label="Prazo" optional value={dueDate} min={startDate} onChange={setDueDate} />
+            <DateField label="Data de início" value={startDate} due={dueDate} onChange={(v) => v && setStartDate(v)} />
+            <DateField label="Prazo" optional value={dueDate} min={startDate} due={dueDate} onChange={setDueDate} />
           </div>
           {dueDate && <p className="pop -mt-2 text-xs text-muted-foreground">{dueLabel(dueDate)}</p>}
           <Button type="button" variant="outline" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}
