@@ -208,6 +208,26 @@ function DateField({ label, value, onChange, optional, min, due }: { label: stri
               disabled={min ? { before: toDate(min) } : false}
               onSelect={(d) => { onChange(d ? format(d, "yyyy-MM-dd") : optional ? undefined : value); setOpen(false); }}
               className="p-3 pointer-events-auto" />
+            {left !== null && (
+              <div className="pointer-events-auto flex justify-center px-3 pb-3">
+                <div
+                  role="status"
+                  aria-label={left < 0 ? "Atrasado" : left === 0 ? "Prazo hoje" : `${left} ${left === 1 ? "dia restante" : "dias restantes"}`}
+                  className={cn("flex size-16 flex-col items-center justify-center rounded-full border text-center transition-colors",
+                    left < 0 ? "border-destructive/50 bg-destructive/10" : "border-ring/50 bg-accent")}>
+                  {left < 0 ? (
+                    <span className="font-display text-sm font-semibold text-destructive">Atrasado</span>
+                  ) : left === 0 ? (
+                    <span className="font-display text-sm font-semibold">Hoje</span>
+                  ) : (
+                    <>
+                      <span className="font-display text-xl font-semibold leading-none tabular-nums">{left}</span>
+                      <span className="mt-1 text-[0.65rem] leading-tight text-muted-foreground">{left === 1 ? "dia restante" : "dias restantes"}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </PopoverContent>
         </Popover>
         {optional && value && <Button type="button" variant="ghost" size="icon" aria-label={`Limpar ${label}`} onClick={() => onChange(undefined)}><X /></Button>}
