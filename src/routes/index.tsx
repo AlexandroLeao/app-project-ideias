@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AttachmentSection } from "./ideia.$id";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { Plus, Search, X, Paperclip, Star, CalendarClock, Pencil, Trash2, ExternalLink } from "lucide-react";
+import { Plus, Search, X, Star, CalendarClock, Pencil, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
