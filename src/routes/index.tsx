@@ -89,30 +89,30 @@ function Home() {
         </div>
       </section>
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mt-6 grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {list.map((i, idx) => {
           const c = catOf(categories, i.category);
           return (
              <Link key={i.id} to="/ideia/$id" params={{ id: i.id }} style={{ animationDelay: `${idx * 40}ms` }} data-category-color={categoryColor(c)}
-               className="category-card rise group flex flex-col rounded-2xl border p-5 transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="flex items-center justify-between">
-                 <span className="py-1 text-xs"><CategoryMark category={c} /></span>
-                <span className="flex items-center gap-2">
+               className="category-card rise group flex min-h-[9.5rem] flex-col rounded-xl border p-3.5 transition hover:-translate-y-0.5 hover:shadow-md">
+              <div className="flex min-w-0 items-center justify-between gap-2">
+                 <span className="min-w-0 truncate text-xs"><CategoryMark category={c} /></span>
+                 <span className="flex shrink-0 items-center gap-1.5">
                   <button type="button" aria-label={i.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} aria-pressed={!!i.favorite}
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); actions.update(i.id, { favorite: !i.favorite }); }}
-                    className="rounded-full p-1 transition hover:scale-110"><Star className={`size-4 ${i.favorite ? "fill-favorite text-favorite" : "text-muted-foreground"}`} /></button>
+                    className="rounded-full p-0.5 transition hover:scale-110"><Star className={`size-3.5 ${i.favorite ? "fill-favorite text-favorite" : "text-muted-foreground"}`} /></button>
                   <StatusDot status={i.status} />
                 </span>
               </div>
-              <h3 className="mt-4 text-xl font-semibold group-hover:text-primary">{i.title}</h3>
-              <div className="mt-2 flex flex-wrap items-center gap-3 text-xs"><PriorityDot priority={i.priority} />{i.dueDate && <span className={`inline-flex items-center gap-1 ${daysLeft(i.dueDate) < 0 ? "font-semibold text-destructive" : "text-muted-foreground"}`}><CalendarClock className="size-3.5" />{dueLabel(i.dueDate)}</span>}</div>
-              <p className="mt-1 line-clamp-3 text-sm text-muted-foreground">{i.description || "Sem descrição."}</p>
-               <span className="mt-auto flex items-center justify-between gap-2 pt-4 text-xs text-muted-foreground">{fmtDate(i.createdAt)}{i.attachment && <Paperclip className="size-4" aria-label="Com anexo" />}</span>
+              <h3 className="mt-2 line-clamp-2 text-base font-semibold leading-snug group-hover:text-primary">{i.title}</h3>
+              <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{i.description || "Sem descrição."}</p>
+              <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.7rem]"><PriorityDot priority={i.priority} />{i.dueDate && <span className={`inline-flex items-center gap-1 ${daysLeft(i.dueDate) < 0 ? "font-semibold text-destructive" : "text-muted-foreground"}`}><CalendarClock className="size-3" />{dueLabel(i.dueDate)}</span>}</div>
+               <span className="mt-auto flex items-center justify-between gap-2 pt-2.5 text-[0.7rem] text-muted-foreground">{fmtDate(i.createdAt)}{i.attachment && <Paperclip className="size-3.5" aria-label="Com anexo" />}</span>
             </Link>
           );
         })}
         {!list.length && (
-          <div className="col-span-full rounded-2xl border border-dashed p-12 text-center text-muted-foreground">
+          <div className="col-span-full rounded-xl border border-dashed p-10 text-center text-muted-foreground">
             {ideas.length ? "Nenhuma ideia encontrada." : "Nenhuma ideia registrada ainda."}
           </div>
         )}
