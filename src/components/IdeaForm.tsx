@@ -5,7 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { actions, dueLabel, PRIORITIES, STATUSES, useStore, type Idea, type Priority, type Status } from "@/lib/ideas";
+import { actions, daysLeft, dueLabel, PRIORITIES, STATUSES, useStore, type Idea, type Priority, type Status } from "@/lib/ideas";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -137,8 +137,8 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <DateField label="Data de início" value={startDate} onChange={(v) => v && setStartDate(v)} />
-            <DateField label="Prazo" optional value={dueDate} min={startDate} onChange={setDueDate} />
+            <DateField label="Data de início" value={startDate} due={dueDate} onChange={(v) => v && setStartDate(v)} />
+            <DateField label="Prazo" optional value={dueDate} min={startDate} due={dueDate} onChange={setDueDate} />
           </div>
           {dueDate && <p className="pop -mt-2 text-xs text-muted-foreground">{dueLabel(dueDate)}</p>}
           <Button type="button" variant="outline" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}
@@ -188,10 +188,11 @@ export function StatusDot({ status }: { status: Status }) {
   );
 }
 
-function DateField({ label, value, onChange, optional, min }: { label: string; value?: string | undefined; onChange: (v: string | undefined) => void; optional?: boolean; min?: string }) {
+function DateField({ label, value, onChange, optional, min, due }: { label: string; value?: string | undefined; onChange: (v: string | undefined) => void; optional?: boolean; min?: string; due?: string | undefined }) {
   const [open, setOpen] = useState(false);
   const toDate = (v: string) => { const [y, m, d] = v.split("-").map(Number); return new Date(y!, m! - 1, d!); };
   const selected = value ? toDate(value) : undefined;
+  const left = due ? daysLeft(due) : null;
   return (
     <div className="field-group space-y-1.5">
       <Label>{label} {optional && <span className="font-normal text-muted-foreground">(opcional)</span>}</Label>
@@ -207,6 +208,26 @@ function DateField({ label, value, onChange, optional, min }: { label: string; v
               disabled={min ? { before: toDate(min) } : false}
               onSelect={(d) => { onChange(d ? format(d, "yyyy-MM-dd") : optional ? undefined : value); setOpen(false); }}
               className="p-3 pointer-events-auto" />
+            {left !== null && (
+              <div className="pointer-events-auto flex justify-center px-3 pb-3">
+                <div
+                  role="status"
+                  aria-label={left < 0 ? "Atrasado" : left === 0 ? "Prazo hoje" : `${left} ${left === 1 ? "dia restante" : "dias restantes"}`}
+                  className={cn("flex size-16 flex-col items-center justify-center rounded-full border text-center transition-colors",
+                    left < 0 ? "border-destructive/50 bg-destructive/10" : "border-ring/50 bg-accent")}>
+                  {left < 0 ? (
+                    <span className="font-display text-sm font-semibold text-destructive">Atrasado</span>
+                  ) : left === 0 ? (
+                    <span className="font-display text-sm font-semibold">Hoje</span>
+                  ) : (
+                    <>
+                      <span className="font-display text-xl font-semibold leading-none tabular-nums">{left}</span>
+                      <span className="mt-1 text-[0.65rem] leading-tight text-muted-foreground">{left === 1 ? "dia restante" : "dias restantes"}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </PopoverContent>
         </Popover>
         {optional && value && <Button type="button" variant="ghost" size="icon" aria-label={`Limpar ${label}`} onClick={() => onChange(undefined)}><X /></Button>}
