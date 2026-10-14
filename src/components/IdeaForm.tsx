@@ -151,17 +151,22 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
           </div>
           <div className="field-group space-y-1.5">
             <Label htmlFor="attachment">Arquivo <span className="font-normal text-muted-foreground">(opcional)</span></Label>
-            <Input id="attachment" type="file" accept=".png,.jfif,.pdf,image/png,image/jpeg,application/pdf" disabled={saving} className="field-control h-auto cursor-pointer py-2" onChange={async (e) => {
-              const input = e.currentTarget;
-              const selected = input.files?.[0];
-              if (!selected) return;
-              try { await validateAttachment(selected); setFile(selected); }
-              catch (error) { input.value = ""; toast.error(error instanceof Error ? error.message : "Arquivo inválido."); }
-            }} />
+            <label
+              onDragOver={(e) => { e.preventDefault(); if (canDragRef.current) setDragOver(true); }}
+              onDragLeave={(e) => { e.preventDefault(); if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragOver(false); }}
+              onDrop={(e) => { e.preventDefault(); setDragOver(false); if (canDragRef.current) void pickFile(e.dataTransfer.files?.[0]); }}
+              className={cn("field-control flex min-h-12 cursor-pointer items-center justify-center rounded-md border border-dashed text-center text-sm font-medium", dragOver && "border-destructive bg-destructive/10")}
+            >
+              <Input id="attachment" ref={fileInputRef} type="file" accept=".png,.jfif,.pdf,image/png,image/jpeg,application/pdf" disabled={saving} className="sr-only" onChange={async (e) => {
+                await pickFile(e.currentTarget.files?.[0]);
+                e.currentTarget.value = "";
+              }} />
+              Escolher arquivo(s)
+            </label>
             <p className="text-xs text-muted-foreground">PNG, JFIF ou PDF · até 10 MB</p>
             {(file || attachment) && <div key={file?.name ?? attachment?.name} className="pop flex items-center gap-2 rounded-md border border-ring bg-accent px-3 py-2 text-sm">
               <Paperclip className="size-4 shrink-0 text-muted-foreground" /><span className="min-w-0 flex-1 truncate">{file?.name ?? attachment?.name}</span>
-              <Button type="button" variant="ghost" size="icon" disabled={saving} aria-label="Remover anexo" onClick={() => { setFile(null); setAttachment(undefined); const input = document.getElementById("attachment"); if (input instanceof HTMLInputElement) input.value = ""; }}><X /></Button>
+              <Button type="button" variant="ghost" size="icon" disabled={saving} aria-label="Remover anexo" onClick={() => { setFile(null); setAttachment(undefined); if (fileInputRef.current) fileInputRef.current.value = ""; }}><X /></Button>
             </div>}
           </div>
           <Button type="submit" disabled={saving} className="w-full rounded-full h-11">{saving ? <><Loader2 className="animate-spin" /> Salvando…</> : idea ? "Salvar" : "Registrar"}</Button>
