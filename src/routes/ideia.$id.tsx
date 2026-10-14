@@ -100,7 +100,7 @@ function Detail() {
   );
 }
 
-function AttachmentSection({ attachment }: { attachment: Attachment }) {
+export function AttachmentSection({ attachment }: { attachment: Attachment }) {
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState<string>();
   async function show() {

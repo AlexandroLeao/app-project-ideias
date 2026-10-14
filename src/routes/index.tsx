@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Plus, Search, X, Paperclip, Star, CalendarClock } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { AttachmentSection } from "./ideia.$id";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { Plus, Search, X, Star, CalendarClock, Pencil, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { IdeaForm, PriorityDot, StatusDot } from "@/components/IdeaForm";
-import { actions, catOf, daysLeft, dueLabel, categoryColor, CATEGORY_COLORS, fmtDate, STATUSES, useStore, type CategoryColor } from "@/lib/ideas";
+import { actions, catOf, daysLeft, dueLabel, categoryColor, CATEGORY_COLORS, fmtDate, fmtDay, STATUSES, priorityOf, type Idea, useStore, type CategoryColor } from "@/lib/ideas";
 import { CategoryMark } from "@/components/CategoryMark";
 
 export const Route = createFileRoute("/")({
@@ -38,6 +41,14 @@ function Home() {
       ),
     [ideas, q, cat, st],
   );
+  const sorted = useMemo(() => [...list].sort((a, b) => PRANK[a.priority ?? "baixa"] - PRANK[b.priority ?? "baixa"]), [list]);
+  const [open, setOpen] = useState<string | null>(null);
+  useEffect(() => {
+    if (!open) return;
+    const h = (e: KeyboardEvent) => e.key === "Escape" && !document.querySelector("[role=dialog],[role=alertdialog]") && setOpen(null);
+    window.addEventListener("keydown", h);
+    return () => window.removeEventListener("keydown", h);
+  }, [open]);
   const counts = (id: string) => ideas.filter((i) => i.status === id).length;
 
   return (
@@ -89,28 +100,12 @@ function Home() {
         </div>
       </section>
 
-      <section className="mt-6 grid grid-cols-1 items-start gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {list.map((i, idx) => {
-          const c = catOf(categories, i.category);
-          return (
-             <Link key={i.id} to="/ideia/$id" params={{ id: i.id }} style={{ animationDelay: `${idx * 40}ms` }} data-category-color={categoryColor(c)}
-               className="category-card rise group flex min-h-[9.5rem] flex-col rounded-xl border p-3.5 transition hover:-translate-y-0.5 hover:shadow-md">
-              <div className="flex min-w-0 items-center justify-between gap-2">
-                 <span className="min-w-0 truncate text-xs"><CategoryMark category={c} /></span>
-                 <span className="flex shrink-0 items-center gap-1.5">
-                  <button type="button" aria-label={i.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} aria-pressed={!!i.favorite}
-                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); actions.update(i.id, { favorite: !i.favorite }); }}
-                    className="rounded-full p-0.5 transition hover:scale-110"><Star className={`size-3.5 ${i.favorite ? "fill-favorite text-favorite" : "text-muted-foreground"}`} /></button>
-                  <StatusDot status={i.status} />
-                </span>
-              </div>
-              <h3 className="mt-2 line-clamp-2 text-base font-semibold leading-snug group-hover:text-primary">{i.title}</h3>
-              <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">{i.description || "Sem descrição."}</p>
-              <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[0.7rem]"><PriorityDot priority={i.priority} />{i.dueDate && <span className={`inline-flex items-center gap-1 ${daysLeft(i.dueDate) < 0 ? "font-semibold text-destructive" : "text-muted-foreground"}`}><CalendarClock className="size-3" />{dueLabel(i.dueDate)}</span>}</div>
-               <span className="mt-auto flex items-center justify-between gap-2 pt-2.5 text-[0.7rem] text-muted-foreground">{fmtDate(i.createdAt)}{i.attachment && <Paperclip className="size-3.5" aria-label="Com anexo" />}</span>
-            </Link>
-          );
-        })}
+      <section style={{ "--n": Math.max(1, list.length) } as React.CSSProperties}
+        className="mt-6 grid grid-flow-row-dense grid-cols-[repeat(min(var(--n),3),minmax(0,1fr))] items-start gap-3 sm:grid-cols-[repeat(min(var(--n),4),minmax(0,1fr))] lg:grid-cols-[repeat(min(var(--n),6),minmax(0,1fr))]">
+        {sorted.map((i, idx) => (
+          <IdeaCard key={i.id} idea={i} idx={idx} size={list.length === 1 ? "lg" : list.length === 2 ? "md" : "sm"}
+            expanded={open === i.id} onToggle={() => setOpen(open === i.id ? null : i.id)} />
+        ))}
         {!list.length && (
           <div className="col-span-full rounded-xl border border-dashed p-10 text-center text-muted-foreground">
             {ideas.length ? "Nenhuma ideia encontrada." : "Nenhuma ideia registrada ainda."}
@@ -152,5 +147,65 @@ function NewCategory() {
         </form>
       </PopoverContent>
     </Popover>
+  );
+}
+
+const PRANK = { alta: 0, media: 1, baixa: 2 } as const;
+const PBORDER = { alta: "border-l-priority-high", media: "border-l-priority-medium", baixa: "border-l-priority-low" } as const;
+
+function IdeaCard({ idea: i, idx, size, expanded, onToggle }: { idea: Idea; idx: number; size: "lg" | "md" | "sm"; expanded: boolean; onToggle: () => void }) {
+  const { categories } = useStore();
+  const c = catOf(categories, i.category);
+  const p = priorityOf(i.priority);
+  const fav = (
+    <button type="button" aria-label={i.favorite ? "Remover dos favoritos" : "Adicionar aos favoritos"} aria-pressed={!!i.favorite}
+      onClick={(e) => { e.stopPropagation(); actions.update(i.id, { favorite: !i.favorite }); }}
+      className="shrink-0 rounded-full p-0.5 transition hover:scale-110"><Star className={`size-3.5 ${i.favorite ? "fill-favorite text-favorite" : "text-muted-foreground"}`} /></button>
+  );
+  return (
+    <article data-category-color={categoryColor(c)} style={{ animationDelay: `${idx * 40}ms` }}
+      className={`category-card rise group relative min-w-0 rounded-xl border border-l-4 transition-all duration-300 ${i.priority ? PBORDER[i.priority] : ""} ${expanded ? "col-span-full p-5 shadow-md" : "p-3 hover:-translate-y-0.5 hover:shadow-md"}`}>
+      <div role="button" tabIndex={0} aria-expanded={expanded} aria-label={expanded ? `Recolher ${i.title}` : `Expandir ${i.title}`}
+        onClick={onToggle} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(); } }}
+        className="cursor-pointer rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <div className="flex min-w-0 items-center justify-between gap-2">
+          <span className="min-w-0 truncate text-xs"><CategoryMark category={c} /></span>
+          <span className="flex shrink-0 items-center gap-1.5">
+            {p && <span className={`size-2.5 rounded-full ${p.dot}`} title={`Prioridade ${p.label}`} aria-label={`Prioridade ${p.label}`} />}
+            {fav}
+            {expanded && <button type="button" aria-label="Fechar" onClick={(e) => { e.stopPropagation(); onToggle(); }} className="rounded-full p-0.5 hover:bg-secondary"><X className="size-4" /></button>}
+          </span>
+        </div>
+        <h3 className={`mt-2 font-semibold leading-snug group-hover:text-primary ${expanded ? "text-2xl" : size === "sm" ? "line-clamp-2 text-sm" : "line-clamp-2 text-lg"}`}>{i.title}</h3>
+        {!expanded && size !== "sm" && <>
+          <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{i.description || "Sem descrição."}</p>
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 text-xs text-muted-foreground"><PriorityDot priority={i.priority} />{fmtDate(i.createdAt)}</div>
+        </>}
+      </div>
+      {expanded && (
+        <div className="rise mt-3 space-y-4">
+          <p className="whitespace-pre-wrap text-sm">{i.description || "Sem descrição."}</p>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
+            <StatusDot status={i.status} />
+            <PriorityDot priority={i.priority} />
+            {i.startDate && <span>Início: {fmtDay(i.startDate)}</span>}
+            {i.dueDate && <span>Prazo: {fmtDay(i.dueDate)}</span>}
+            {i.dueDate && <span className={`inline-flex items-center gap-1 ${daysLeft(i.dueDate) < 0 ? "font-semibold text-destructive" : "text-muted-foreground"}`}><CalendarClock className="size-4" />{dueLabel(i.dueDate)}</span>}
+          </div>
+          {i.attachment && <AttachmentSection key={i.attachment.token} attachment={i.attachment} />}
+          <div className="flex flex-wrap gap-2">
+            <IdeaForm idea={i} trigger={<Button variant="outline" size="sm"><Pencil /> Editar</Button>} />
+            <AlertDialog>
+              <AlertDialogTrigger asChild><Button variant="outline" size="sm"><Trash2 /> Excluir</Button></AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader><AlertDialogTitle>Excluir esta ideia?</AlertDialogTitle><AlertDialogDescription>Essa ação não pode ser desfeita.</AlertDialogDescription></AlertDialogHeader>
+                <AlertDialogFooter><AlertDialogCancel>Cancelar</AlertDialogCancel><AlertDialogAction onClick={() => { actions.remove(i.id); toast("Ideia excluída"); }}>Excluir</AlertDialogAction></AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <Button asChild variant="ghost" size="sm"><Link to="/ideia/$id" params={{ id: i.id }}><ExternalLink /> Abrir página</Link></Button>
+          </div>
+        </div>
+      )}
+    </article>
   );
 }
