@@ -12,8 +12,8 @@ function matchesSignature(bytes: Uint8Array, type: Attachment["type"]) {
 
 // Each request carries the object's 256-bit token; storage policies only expose the matching object, so nothing can be listed.
 function storageFor(token: string) {
-  const url = import.meta.env.VITE_SUPABASE_URL as string;
-  const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+  const url = import.meta.env['VITE_SUPABASE_URL'] as string;
+  const key = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] as string;
   if (!url || !key) throw new Error("Envio de arquivos não configurado.");
   return createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false, storageKey: "lucida-attachments" },
