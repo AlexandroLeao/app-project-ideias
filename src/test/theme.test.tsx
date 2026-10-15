@@ -3,14 +3,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeSelector } from "@/components/ThemeSelector";
 
-const renderTheme = () => render(<ThemeProvider><ThemeSelector /></ThemeProvider>);
+const renderTheme = () =>
+  render(
+    <ThemeProvider>
+      <ThemeSelector />
+    </ThemeProvider>,
+  );
 
 describe("App theme preference", () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.classList.remove("dark");
   });
-  afterEach(() => { cleanup(); vi.restoreAllMocks(); });
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
 
   it("defaults to light even when the system prefers dark", () => {
     vi.spyOn(window, "matchMedia").mockReturnValue({ matches: true } as MediaQueryList);

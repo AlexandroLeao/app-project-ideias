@@ -11,9 +11,28 @@ export const STATUSES: { id: Status; label: string; dot: string }[] = [
   { id: "pausado", label: "Pausado", dot: "bg-status-paused" },
 ];
 
-export const CATEGORY_COLORS = ["green", "orange", "blue", "violet", "gold", "rose", "pink", "teal", "cyan", "gray", "lime", "red"] as const;
-export type CategoryColor = typeof CATEGORY_COLORS[number];
-export type Category = { id: string; label: string; color?: CategoryColor; emoji?: string; custom?: boolean };
+export const CATEGORY_COLORS = [
+  "green",
+  "orange",
+  "blue",
+  "violet",
+  "gold",
+  "rose",
+  "pink",
+  "teal",
+  "cyan",
+  "gray",
+  "lime",
+  "red",
+] as const;
+export type CategoryColor = (typeof CATEGORY_COLORS)[number];
+export type Category = {
+  id: string;
+  label: string;
+  color?: CategoryColor;
+  emoji?: string;
+  custom?: boolean;
+};
 
 export const DEFAULT_CATEGORIES: Category[] = [
   { id: "programacao", label: "Programação", color: "green" },
@@ -55,10 +74,25 @@ export type Idea = {
   updatedAt: string;
 };
 
-const parseDay = (d: string) => { const [y, m, day] = d.split("-").map(Number); return new Date(y!, (m ?? 1) - 1, day ?? 1); };
-export const fmtDay = (d: string) => parseDay(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
-export const daysLeft = (d: string) => { const t = new Date(); t.setHours(0, 0, 0, 0); return Math.round((parseDay(d).getTime() - t.getTime()) / 86400000); };
-export const dueLabel = (d: string) => { const n = daysLeft(d); return n < 0 ? `Atrasado ${-n} dia${n === -1 ? "" : "s"}` : n === 0 ? "Prazo hoje" : `${n} dia${n === 1 ? "" : "s"} restante${n === 1 ? "" : "s"}`; };
+const parseDay = (d: string) => {
+  const [y, m, day] = d.split("-").map(Number);
+  return new Date(y!, (m ?? 1) - 1, day ?? 1);
+};
+export const fmtDay = (d: string) =>
+  parseDay(d).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+export const daysLeft = (d: string) => {
+  const t = new Date();
+  t.setHours(0, 0, 0, 0);
+  return Math.round((parseDay(d).getTime() - t.getTime()) / 86400000);
+};
+export const dueLabel = (d: string) => {
+  const n = daysLeft(d);
+  return n < 0
+    ? `Atrasado ${-n} dia${n === -1 ? "" : "s"}`
+    : n === 0
+      ? "Prazo hoje"
+      : `${n} dia${n === 1 ? "" : "s"} restante${n === 1 ? "" : "s"}`;
+};
 
 type State = { ideas: Idea[]; categories: Category[] };
 
@@ -72,10 +106,22 @@ function load(): State {
   if (state) return state;
   try {
     const raw = localStorage.getItem(KEY);
-    const saved = raw ? JSON.parse(raw) as State : EMPTY;
-    const cleaned = { ...saved, categories: saved.categories.map((c, index) => ({ ...c, color: c.color ?? DEFAULT_CATEGORIES.find((d) => d.id === c.id)?.color ?? CATEGORY_COLORS[index % CATEGORY_COLORS.length] ?? "gray" })), ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)) };
+    const saved = raw ? (JSON.parse(raw) as State) : EMPTY;
+    const cleaned = {
+      ...saved,
+      categories: saved.categories.map((c, index) => ({
+        ...c,
+        color:
+          c.color ??
+          DEFAULT_CATEGORIES.find((d) => d.id === c.id)?.color ??
+          CATEGORY_COLORS[index % CATEGORY_COLORS.length] ??
+          "gray",
+      })),
+      ideas: saved.ideas.filter((idea) => !["s1", "s2", "s3"].includes(idea.id)),
+    };
     state = cleaned;
-    if (cleaned.ideas.length !== saved.ideas.length) localStorage.setItem(KEY, JSON.stringify(cleaned));
+    if (cleaned.ideas.length !== saved.ideas.length)
+      localStorage.setItem(KEY, JSON.stringify(cleaned));
   } catch {
     state = EMPTY;
   }
@@ -96,15 +142,37 @@ export function useStore(): State {
 }
 
 export const actions = {
-  create(data: Pick<Idea, "title" | "category" | "description" | "status" | "attachment" | "priority" | "startDate" | "dueDate" | "favorite">) {
+  create(
+    data: Pick<
+      Idea,
+      | "title"
+      | "category"
+      | "description"
+      | "status"
+      | "attachment"
+      | "priority"
+      | "startDate"
+      | "dueDate"
+      | "favorite"
+    >,
+  ) {
     const s = load();
-    const idea: Idea = { ...data, id: crypto.randomUUID(), notes: "", createdAt: now(), updatedAt: now() };
+    const idea: Idea = {
+      ...data,
+      id: crypto.randomUUID(),
+      notes: "",
+      createdAt: now(),
+      updatedAt: now(),
+    };
     set({ ...s, ideas: [idea, ...s.ideas] });
     return idea;
   },
   update(id: string, patch: Partial<Idea>) {
     const s = load();
-    set({ ...s, ideas: s.ideas.map((i) => (i.id === id ? { ...i, ...patch, updatedAt: now() } : i)) });
+    set({
+      ...s,
+      ideas: s.ideas.map((i) => (i.id === id ? { ...i, ...patch, updatedAt: now() } : i)),
+    });
   },
   remove(id: string) {
     const s = load();

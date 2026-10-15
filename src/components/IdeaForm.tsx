@@ -1,11 +1,33 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { actions, daysLeft, dueLabel, PRIORITIES, STATUSES, useStore, type Idea, type Priority, type Status } from "@/lib/ideas";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  actions,
+  daysLeft,
+  dueLabel,
+  PRIORITIES,
+  STATUSES,
+  useStore,
+  type Idea,
+  type Priority,
+  type Status,
+} from "@/lib/ideas";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -17,16 +39,27 @@ import { uploadAttachment, validateAttachment } from "@/lib/attachments";
 import { z } from "zod";
 import { CategoryMark } from "@/components/CategoryMark";
 
-const ideaSchema = z.object({
-  title: z.string().trim().min(1, "Informe um título.").max(200, "Use até 200 caracteres no título."),
-  category: z.string().min(1),
-  description: z.string().trim().max(10000, "Use até 10.000 caracteres na descrição."),
-  status: z.enum(["ideia", "planejando", "andamento", "concluido", "pausado"]),
-  priority: z.enum(["alta", "media", "baixa"]),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Escolha a data de início."),
-  dueDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  favorite: z.boolean(),
-}).refine((d) => !d.dueDate || d.dueDate >= d.startDate, { message: "O prazo deve ser depois da data de início." });
+const ideaSchema = z
+  .object({
+    title: z
+      .string()
+      .trim()
+      .min(1, "Informe um título.")
+      .max(200, "Use até 200 caracteres no título."),
+    category: z.string().min(1),
+    description: z.string().trim().max(10000, "Use até 10.000 caracteres na descrição."),
+    status: z.enum(["ideia", "planejando", "andamento", "concluido", "pausado"]),
+    priority: z.enum(["alta", "media", "baixa"]),
+    startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Escolha a data de início."),
+    dueDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional(),
+    favorite: z.boolean(),
+  })
+  .refine((d) => !d.dueDate || d.dueDate >= d.startDate, {
+    message: "O prazo deve ser depois da data de início.",
+  });
 
 const today = () => format(new Date(), "yyyy-MM-dd");
 
@@ -49,7 +82,9 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
   const canDragRef = useRef(false);
   useEffect(() => {
     const mq = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const update = () => { canDragRef.current = mq.matches; };
+    const update = () => {
+      canDragRef.current = mq.matches;
+    };
     update();
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
@@ -69,58 +104,122 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (saving) return;
-    const parsed = ideaSchema.safeParse({ title, category, description, status, priority, startDate, dueDate, favorite });
-    if (!parsed.success) { toast.error(parsed.error.issues[0]?.message ?? "Revise os campos."); return; }
+    const parsed = ideaSchema.safeParse({
+      title,
+      category,
+      description,
+      status,
+      priority,
+      startDate,
+      dueDate,
+      favorite,
+    });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Revise os campos.");
+      return;
+    }
     setSaving(true);
     try {
-    const data = { ...parsed.data, attachment: file ? await uploadAttachment(file) : attachment };
-    if (idea) {
-      actions.update(idea.id, data);
-      toast.success("Ideia atualizada");
-    } else {
-      actions.create(data);
-      toast.success("Pensamento registrado");
-      setTitle(""); setDescription(""); setStatus("ideia"); setPriority("media"); setStartDate(today()); setDueDate(undefined); setFavorite(false);
-      setFile(null); setAttachment(undefined);
-    }
-    setOpen(false);
+      const data = { ...parsed.data, attachment: file ? await uploadAttachment(file) : attachment };
+      if (idea) {
+        actions.update(idea.id, data);
+        toast.success("Ideia atualizada");
+      } else {
+        actions.create(data);
+        toast.success("Pensamento registrado");
+        setTitle("");
+        setDescription("");
+        setStatus("ideia");
+        setPriority("media");
+        setStartDate(today());
+        setDueDate(undefined);
+        setFavorite(false);
+        setFile(null);
+        setAttachment(undefined);
+      }
+      setOpen(false);
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Não foi possível salvar. Tente novamente.");
-    } finally { setSaving(false); }
+      toast.error(
+        error instanceof Error ? error.message : "Não foi possível salvar. Tente novamente.",
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
-    <Dialog open={open} onOpenChange={(next) => {
-      if (saving) return;
-      if (next && idea) { setTitle(idea.title); setCategory(idea.category); setDescription(idea.description); setStatus(idea.status); setAttachment(idea.attachment); setFile(null); setPriority(idea.priority ?? "media"); setStartDate(idea.startDate ?? today()); setDueDate(idea.dueDate); setFavorite(idea.favorite ?? false); }
-      setOpen(next);
-    }}>
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (saving) return;
+        if (next && idea) {
+          setTitle(idea.title);
+          setCategory(idea.category);
+          setDescription(idea.description);
+          setStatus(idea.status);
+          setAttachment(idea.attachment);
+          setFile(null);
+          setPriority(idea.priority ?? "media");
+          setStartDate(idea.startDate ?? today());
+          setDueDate(idea.dueDate);
+          setFavorite(idea.favorite ?? false);
+        }
+        setOpen(next);
+      }}
+    >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[90dvh] overflow-y-auto rounded-2xl sm:max-w-lg" onInteractOutside={(e) => saving && e.preventDefault()} onEscapeKeyDown={(e) => saving && e.preventDefault()}>
+      <DialogContent
+        className="max-h-[90dvh] overflow-y-auto rounded-2xl sm:max-w-lg"
+        onInteractOutside={(e) => saving && e.preventDefault()}
+        onEscapeKeyDown={(e) => saving && e.preventDefault()}
+      >
         <DialogHeader>
-          <DialogTitle className="font-display text-2xl">{idea ? "Editar ideia" : "O que temos para hoje?"}</DialogTitle>
+          <DialogTitle className="font-display text-2xl">
+            {idea ? "Editar ideia" : "O que temos para hoje?"}
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="field-group space-y-1.5">
             <Label htmlFor="t">Título</Label>
-            <Input id="t" autoFocus value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} placeholder="Ex.: Estudar Python" required className="field-control" />
+            <Input
+              id="t"
+              autoFocus
+              value={title}
+              maxLength={200}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ex.: Estudar Python"
+              required
+              className="field-control"
+            />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="field-group space-y-1.5">
               <Label>Categoria</Label>
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="field-control"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="field-control">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  {categories.map((c) => <SelectItem key={c.id} value={c.id}><CategoryMark category={c} /></SelectItem>)}
+                  {categories.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>
+                      <CategoryMark category={c} />
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="field-group space-y-1.5">
               <Label>Status</Label>
               <Select value={status} onValueChange={(v) => setStatus(v as Status)}>
-                <SelectTrigger className="field-control"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="field-control">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
-                  {STATUSES.map((s) => <SelectItem key={s.id} value={s.id}>{s.label}</SelectItem>)}
+                  {STATUSES.map((s) => (
+                    <SelectItem key={s.id} value={s.id}>
+                      {s.label}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -129,48 +228,142 @@ export function IdeaForm({ idea, trigger }: { idea?: Idea; trigger: ReactNode })
             <Label>Prioridade</Label>
             <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Prioridade">
               {PRIORITIES.map((p) => (
-                <Button key={p.id} type="button" variant="outline" role="radio" aria-checked={priority === p.id} onClick={() => setPriority(p.id)}
-                  className={cn("field-control rounded-full transition", priority === p.id && "border-ring bg-accent font-semibold")}>
-                  <span className={`size-2.5 rounded-full ${p.dot}`} aria-hidden />{p.label}
+                <Button
+                  key={p.id}
+                  type="button"
+                  variant="outline"
+                  role="radio"
+                  aria-checked={priority === p.id}
+                  onClick={() => setPriority(p.id)}
+                  className={cn(
+                    "field-control rounded-full transition",
+                    priority === p.id && "border-ring bg-accent font-semibold",
+                  )}
+                >
+                  <span className={`size-2.5 rounded-full ${p.dot}`} aria-hidden />
+                  {p.label}
                 </Button>
               ))}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <DateField label="Data de início" value={startDate} due={dueDate} onChange={(v) => v && setStartDate(v)} />
-            <DateField label="Prazo" optional value={dueDate} min={startDate} due={dueDate} onChange={setDueDate} />
+            <DateField
+              label="Data de início"
+              value={startDate}
+              due={dueDate}
+              onChange={(v) => v && setStartDate(v)}
+            />
+            <DateField
+              label="Prazo"
+              optional
+              value={dueDate}
+              min={startDate}
+              due={dueDate}
+              onChange={setDueDate}
+            />
           </div>
-          {dueDate && <p className="pop -mt-2 text-xs text-muted-foreground">{dueLabel(dueDate)}</p>}
-          <Button type="button" variant="outline" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}
-            className={cn("field-control w-full justify-start rounded-full transition", favorite && "border-ring bg-accent")}>
-            <Star className={cn("transition", favorite && "fill-favorite text-favorite")} />{favorite ? "Nos favoritos" : "Adicionar aos favoritos"}
+          {dueDate && (
+            <p className="pop -mt-2 text-xs text-muted-foreground">{dueLabel(dueDate)}</p>
+          )}
+          <Button
+            type="button"
+            variant="outline"
+            aria-pressed={favorite}
+            onClick={() => setFavorite(!favorite)}
+            className={cn(
+              "field-control w-full justify-start rounded-full transition",
+              favorite && "border-ring bg-accent",
+            )}
+          >
+            <Star className={cn("transition", favorite && "fill-favorite text-favorite")} />
+            {favorite ? "Nos favoritos" : "Adicionar aos favoritos"}
           </Button>
           <div className="field-group space-y-1.5">
             <Label htmlFor="d">Descrição</Label>
-            <Textarea id="d" rows={4} maxLength={10000} value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Escreva livremente. Ela pode simplesmente existir como ideia." className="field-control" />
+            <Textarea
+              id="d"
+              rows={4}
+              maxLength={10000}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Escreva livremente. Ela pode simplesmente existir como ideia."
+              className="field-control"
+            />
           </div>
           <div className="field-group space-y-1.5">
-            <Label htmlFor="attachment">Arquivo <span className="font-normal text-muted-foreground">(opcional)</span></Label>
+            <Label htmlFor="attachment">
+              Arquivo <span className="font-normal text-muted-foreground">(opcional)</span>
+            </Label>
             <label
-              onDragOver={(e) => { e.preventDefault(); if (canDragRef.current) setDragOver(true); }}
-              onDragLeave={(e) => { e.preventDefault(); if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragOver(false); }}
-              onDrop={(e) => { e.preventDefault(); setDragOver(false); if (canDragRef.current) void pickFile(e.dataTransfer.files?.[0]); }}
-              className={cn("field-control flex min-h-12 cursor-pointer items-center justify-center rounded-md border border-dashed text-center text-sm font-medium", dragOver && "border-destructive bg-destructive/10")}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (canDragRef.current) setDragOver(true);
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragOver(false);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragOver(false);
+                if (canDragRef.current) void pickFile(e.dataTransfer.files?.[0]);
+              }}
+              className={cn(
+                "field-control flex min-h-12 cursor-pointer items-center justify-center rounded-md border border-dashed text-center text-sm font-medium",
+                dragOver && "border-destructive bg-destructive/10",
+              )}
             >
-              <Input id="attachment" ref={fileInputRef} type="file" accept=".png,.jfif,.pdf,image/png,image/jpeg,application/pdf" disabled={saving} className="sr-only" onChange={async (e) => {
-                const input = e.currentTarget;
-                await pickFile(input.files?.[0]);
-                input.value = "";
-              }} />
+              <Input
+                id="attachment"
+                ref={fileInputRef}
+                type="file"
+                accept=".png,.jfif,.pdf,image/png,image/jpeg,application/pdf"
+                disabled={saving}
+                className="sr-only"
+                onChange={async (e) => {
+                  const input = e.currentTarget;
+                  await pickFile(input.files?.[0]);
+                  input.value = "";
+                }}
+              />
               Escolher arquivo(s)
             </label>
             <p className="text-xs text-muted-foreground">PNG, JFIF ou PDF · até 10 MB</p>
-            {(file || attachment) && <div key={file?.name ?? attachment?.name} className="pop flex items-center gap-2 rounded-md border border-ring bg-accent px-3 py-2 text-sm">
-              <Paperclip className="size-4 shrink-0 text-muted-foreground" /><span className="min-w-0 flex-1 truncate">{file?.name ?? attachment?.name}</span>
-              <Button type="button" variant="ghost" size="icon" disabled={saving} aria-label="Remover anexo" onClick={() => { setFile(null); setAttachment(undefined); if (fileInputRef.current) fileInputRef.current.value = ""; }}><X /></Button>
-            </div>}
+            {(file || attachment) && (
+              <div
+                key={file?.name ?? attachment?.name}
+                className="pop flex items-center gap-2 rounded-md border border-ring bg-accent px-3 py-2 text-sm"
+              >
+                <Paperclip className="size-4 shrink-0 text-muted-foreground" />
+                <span className="min-w-0 flex-1 truncate">{file?.name ?? attachment?.name}</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  disabled={saving}
+                  aria-label="Remover anexo"
+                  onClick={() => {
+                    setFile(null);
+                    setAttachment(undefined);
+                    if (fileInputRef.current) fileInputRef.current.value = "";
+                  }}
+                >
+                  <X />
+                </Button>
+              </div>
+            )}
           </div>
-          <Button type="submit" disabled={saving} className="w-full rounded-full h-11">{saving ? <><Loader2 className="animate-spin" /> Salvando…</> : idea ? "Salvar" : "Registrar"}</Button>
+          <Button type="submit" disabled={saving} className="w-full rounded-full h-11">
+            {saving ? (
+              <>
+                <Loader2 className="animate-spin" /> Salvando…
+              </>
+            ) : idea ? (
+              "Salvar"
+            ) : (
+              "Registrar"
+            )}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
@@ -188,41 +381,93 @@ export function StatusDot({ status }: { status: Status }) {
   );
 }
 
-function DateField({ label, value, onChange, optional, min, due }: { label: string; value?: string | undefined; onChange: (v: string | undefined) => void; optional?: boolean; min?: string; due?: string | undefined }) {
+function DateField({
+  label,
+  value,
+  onChange,
+  optional,
+  min,
+  due,
+}: {
+  label: string;
+  value?: string | undefined;
+  onChange: (v: string | undefined) => void;
+  optional?: boolean;
+  min?: string;
+  due?: string | undefined;
+}) {
   const [open, setOpen] = useState(false);
-  const toDate = (v: string) => { const [y, m, d] = v.split("-").map(Number); return new Date(y!, m! - 1, d!); };
+  const toDate = (v: string) => {
+    const [y, m, d] = v.split("-").map(Number);
+    return new Date(y!, m! - 1, d!);
+  };
   const selected = value ? toDate(value) : undefined;
   const left = due ? daysLeft(due) : null;
   return (
     <div className="field-group space-y-1.5">
-      <Label>{label} {optional && <span className="font-normal text-muted-foreground">(opcional)</span>}</Label>
+      <Label>
+        {label} {optional && <span className="font-normal text-muted-foreground">(opcional)</span>}
+      </Label>
       <div className="flex gap-1">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <Button type="button" variant="outline" className={cn("field-control min-w-0 flex-1 justify-start px-3 font-normal", !value && "text-muted-foreground")}>
-              <CalendarIcon />{selected ? format(selected, "dd/MM/yyyy") : "Escolher"}
+            <Button
+              type="button"
+              variant="outline"
+              className={cn(
+                "field-control min-w-0 flex-1 justify-start px-3 font-normal",
+                !value && "text-muted-foreground",
+              )}
+            >
+              <CalendarIcon />
+              {selected ? format(selected, "dd/MM/yyyy") : "Escolher"}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar mode="single" locale={ptBR} selected={selected} defaultMonth={selected ?? (min ? toDate(min) : new Date())}
+            <Calendar
+              mode="single"
+              locale={ptBR}
+              selected={selected}
+              defaultMonth={selected ?? (min ? toDate(min) : new Date())}
               disabled={min ? { before: toDate(min) } : false}
-              onSelect={(d) => { onChange(d ? format(d, "yyyy-MM-dd") : optional ? undefined : value); setOpen(false); }}
-              className="p-3 pointer-events-auto" />
+              onSelect={(d) => {
+                onChange(d ? format(d, "yyyy-MM-dd") : optional ? undefined : value);
+                setOpen(false);
+              }}
+              className="p-3 pointer-events-auto"
+            />
             {left !== null && (
               <div className="pointer-events-auto flex justify-center px-3 pb-3">
                 <div
                   role="status"
-                  aria-label={left < 0 ? "Atrasado" : left === 0 ? "Prazo hoje" : `${left} ${left === 1 ? "dia restante" : "dias restantes"}`}
-                  className={cn("flex size-16 flex-col items-center justify-center rounded-full border text-center transition-colors",
-                    left < 0 ? "border-destructive/50 bg-destructive/10" : "border-ring/50 bg-accent")}>
+                  aria-label={
+                    left < 0
+                      ? "Atrasado"
+                      : left === 0
+                        ? "Prazo hoje"
+                        : `${left} ${left === 1 ? "dia restante" : "dias restantes"}`
+                  }
+                  className={cn(
+                    "flex size-16 flex-col items-center justify-center rounded-full border text-center transition-colors",
+                    left < 0
+                      ? "border-destructive/50 bg-destructive/10"
+                      : "border-ring/50 bg-accent",
+                  )}
+                >
                   {left < 0 ? (
-                    <span className="font-display text-sm font-semibold text-destructive">Atrasado</span>
+                    <span className="font-display text-sm font-semibold text-destructive">
+                      Atrasado
+                    </span>
                   ) : left === 0 ? (
                     <span className="font-display text-sm font-semibold">Hoje</span>
                   ) : (
                     <>
-                      <span className="font-display text-xl font-semibold leading-none tabular-nums">{left}</span>
-                      <span className="mt-1 text-[0.65rem] leading-tight text-muted-foreground">{left === 1 ? "dia restante" : "dias restantes"}</span>
+                      <span className="font-display text-xl font-semibold leading-none tabular-nums">
+                        {left}
+                      </span>
+                      <span className="mt-1 text-[0.65rem] leading-tight text-muted-foreground">
+                        {left === 1 ? "dia restante" : "dias restantes"}
+                      </span>
                     </>
                   )}
                 </div>
@@ -230,7 +475,17 @@ function DateField({ label, value, onChange, optional, min, due }: { label: stri
             )}
           </PopoverContent>
         </Popover>
-        {optional && value && <Button type="button" variant="ghost" size="icon" aria-label={`Limpar ${label}`} onClick={() => onChange(undefined)}><X /></Button>}
+        {optional && value && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={`Limpar ${label}`}
+            onClick={() => onChange(undefined)}
+          >
+            <X />
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -239,5 +494,10 @@ function DateField({ label, value, onChange, optional, min, due }: { label: stri
 export function PriorityDot({ priority }: { priority?: Priority | undefined }) {
   const p = PRIORITIES.find((x) => x.id === priority);
   if (!p) return null;
-  return <span className="inline-flex items-center gap-1.5 text-xs font-medium"><span className={`size-2 rounded-full ${p.dot}`} aria-hidden />{p.label}</span>;
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+      <span className={`size-2 rounded-full ${p.dot}`} aria-hidden />
+      {p.label}
+    </span>
+  );
 }
