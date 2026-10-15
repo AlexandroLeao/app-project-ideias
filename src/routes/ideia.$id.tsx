@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Star, CalendarDays, ArrowLeft, Pencil, Trash2, Paperclip, ExternalLink, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { openAttachment } from "@/lib/attachments.functions";
+import { openAttachment } from "@/lib/attachments";
 import type { Attachment } from "@/lib/attachments";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
