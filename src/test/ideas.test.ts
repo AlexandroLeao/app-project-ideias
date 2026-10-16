@@ -62,8 +62,8 @@ describe("prioridades, status e categorias", () => {
     const m = await loadModule();
     expect(m.priorityOf("alta")?.label).toBe("Alta");
     expect(m.priorityOf(undefined)).toBeUndefined();
-    expect(m.statusOf("andamento").label).toBe("Em andamento");
-    expect(m.statusOf("x" as never).id).toBe("ideia");
+    expect(m.statusOf("andamento")?.label).toBe("Em andamento");
+    expect(m.statusOf("x" as never)?.id).toBe("ideia");
   });
 
   it("resolve cor da categoria e categoria desconhecida", async () => {
