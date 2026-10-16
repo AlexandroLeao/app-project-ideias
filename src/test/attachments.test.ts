@@ -1,6 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { MAX_ATTACHMENT_SIZE, openAttachment, validateAttachment } from "@/lib/attachments";
 
+// jsdom's Blob lacks arrayBuffer(); browsers provide it, so emulate it with FileReader.
+if (!Blob.prototype.arrayBuffer)
+  Blob.prototype.arrayBuffer = function (this: Blob) {
+    return new Promise<ArrayBuffer>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as ArrayBuffer);
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(this);
+    });
+  };
+
 const PNG = [137, 80, 78, 71, 13, 10, 26, 10];
 const JPG = [255, 216, 255, 224];
 const PDF = [37, 80, 68, 70, 45, 49];

@@ -51,7 +51,7 @@ describe("datas e prazos", () => {
 
   it("formata a data do dia sem deslocamento de fuso", async () => {
     const { fmtDay } = await loadModule();
-    const text = fmtDay("2026-10-01");
+    const text: string = fmtDay("2026-10-01");
     expect(text).toMatch(/^01/);
     expect(text).toContain("2026");
   });
