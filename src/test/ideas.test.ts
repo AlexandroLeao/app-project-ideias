@@ -103,7 +103,9 @@ describe("persistência das ideias", () => {
     const m = await loadModule();
     m.actions.create({ ...base, title: "Primeira" });
     m.actions.create({ ...base, title: "Segunda" });
-    const titles = JSON.parse(localStorage.getItem(KEY)!).ideas.map((i: { title: string }) => i.title);
+    const titles = JSON.parse(localStorage.getItem(KEY)!).ideas.map(
+      (i: { title: string }) => i.title,
+    );
     expect(titles).toEqual(["Segunda", "Primeira"]);
   });
 
