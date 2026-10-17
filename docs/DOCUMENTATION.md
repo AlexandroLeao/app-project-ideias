@@ -1026,6 +1026,48 @@ Para uma evolução futura do projeto, recomenda-se registrar:
 
 Isso permite transformar testes manuais em histórico de qualidade do projeto.
 
+## 8. Integração contínua (GitHub Actions)
+
+O workflow `.github/workflows/ci.yml` executa, a cada push e pull request, as verificações automáticas do projeto: instalação com lockfile congelado, lint, typecheck, testes automatizados e build.
+
+### 8.1 Primeira execução real
+
+Resultados confirmados no log do GitHub Actions:
+
+| Item | Resultado |
+| --- | --- |
+| Workflow | `CI` |
+| Job | `Lint, typecheck, test e build` |
+| Branch | `main` |
+| Commit | `a59b1881a0b063968caf1980a828b98e4248d092` |
+| Resultado | Sucesso |
+| Runner | Ubuntu 24.04 |
+| Node.js | v22.23.3 |
+| Bun | 1.3.3 |
+| Instalação | `bun install --frozen-lockfile` — concluída |
+| Lint | 0 erros, 7 avisos |
+| Typecheck | Aprovado |
+| Testes | 4 arquivos, 25 testes aprovados |
+| Build | Concluído (cliente, servidor e Nitro/Cloudflare) |
+| Duração observada | Aproximadamente 28 segundos (log detalhado) |
+
+Escopo do resultado: a execução confirma que o código instala, passa no lint sem erros, no typecheck, nos 25 testes automatizados existentes e gera o build. Ela **não** valida integralmente desempenho, segurança nem o funcionamento de todas as funcionalidades — por exemplo, o envio e a abertura reais de anexos no Lovable Cloud não são cobertos pelos testes atuais.
+
+### 8.2 Avisos para acompanhamento
+
+Nenhum dos itens abaixo causou falha no job; todos são **avisos**, registrados para análise futura e não corrigidos nesta etapa.
+
+| # | Aviso | Tipo | Acompanhamento |
+| --- | --- | --- | --- |
+| 1 | Depreciação do runtime Node.js 20 usado por `actions/checkout@v4` e `actions/setup-node@v4` | Aviso da plataforma | Avaliar versões mais novas das actions |
+| 2 | Sete avisos `react-refresh/only-export-components` | Aviso de lint | Avaliar reorganização dos componentes de interface afetados |
+| 3 | Depreciação do módulo `punycode` durante a execução/limpeza | Aviso de runtime | Identificar a dependência de origem |
+| 4 | `vite-tsconfig-paths` possivelmente desnecessário (Vite já resolve caminhos do TypeScript) | Aviso de build | Avaliar remoção em tarefa própria |
+| 5 | Chunk do cliente acima de 500 kB antes da compressão | Aviso de build | Avaliar divisão de código |
+| 6 | Futura migração de `ubuntu-latest` para Ubuntu 26 | Notificação da plataforma | Acompanhar e, se necessário, fixar a versão do runner |
+| 7 | Atividade de cache no log | Observação | Investigar separadamente antes de adicionar configurações de cache |
+
+
 # 11 — Versionamento
 
 ## 1. Repositório
