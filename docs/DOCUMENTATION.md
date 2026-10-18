@@ -1028,44 +1028,86 @@ Isso permite transformar testes manuais em histórico de qualidade do projeto.
 
 ## 8. Integração contínua (GitHub Actions)
 
-O workflow `.github/workflows/ci.yml` executa, a cada push e pull request, as verificações automáticas do projeto: instalação com lockfile congelado, lint, typecheck, testes automatizados e build.
+O projeto utiliza GitHub Actions para executar verificações automatizadas durante o desenvolvimento. O workflow está definido em `.github/workflows/ci.yml`.
 
-### 8.1 Primeira execução real
+A pipeline executa as seguintes etapas:
 
-Resultados confirmados no log do GitHub Actions:
+1. Obtém o código do repositório.
+2. Configura o ambiente com Node.js 22 e Bun.
+3. Instala as dependências utilizando `bun install --frozen-lockfile`.
+4. Executa o lint.
+5. Executa a verificação de tipos TypeScript.
+6. Executa os testes automatizados.
+7. Gera o build da aplicação.
 
-| Item | Resultado |
-| --- | --- |
-| Workflow | `CI` |
-| Job | `Lint, typecheck, test e build` |
-| Branch | `main` |
-| Commit | `a59b1881a0b063968caf1980a828b98e4248d092` |
-| Resultado | Sucesso |
-| Runner | Ubuntu 24.04 |
-| Node.js | v22.23.3 |
-| Bun | 1.3.3 |
-| Instalação | `bun install --frozen-lockfile` — concluída |
-| Lint | 0 erros, 7 avisos |
+O workflow é acionado em eventos de `push` e `pull_request`, conforme a configuração do arquivo YAML.
+
+### 8.1. Execução automatizada confirmada
+
+Uma execução registrada no GitHub Actions apresentou os seguintes resultados:
+
+| Verificação | Resultado |
+|---|---|
+| Instalação de dependências | Aprovada |
+| Lint | Aprovado, com 7 avisos |
 | Typecheck | Aprovado |
-| Testes | 4 arquivos, 25 testes aprovados |
-| Build | Concluído (cliente, servidor e Nitro/Cloudflare) |
-| Duração observada | Aproximadamente 28 segundos (log detalhado) |
+| Testes automatizados | 25 testes aprovados em 4 arquivos |
+| Build | Concluído |
+| Resultado geral | Sucesso |
 
-Escopo do resultado: a execução confirma que o código instala, passa no lint sem erros, no typecheck, nos 25 testes automatizados existentes e gera o build. Ela **não** valida integralmente desempenho, segurança nem o funcionamento de todas as funcionalidades — por exemplo, o envio e a abertura reais de anexos no Lovable Cloud não são cobertos pelos testes atuais.
+A execução inicial documentada ocorreu na branch `main`, no commit `a59b1881a0b063968caf1980a828b98e4248d092`, com duração aproximada de 28 segundos.
 
-### 8.2 Avisos para acompanhamento
+Os resultados confirmam que o código passou pelas verificações automatizadas naquela versão. Eles não comprovam, isoladamente, a ausência de defeitos em todas as funcionalidades.
 
-Nenhum dos itens abaixo causou falha no job; todos são **avisos**, registrados para análise futura e não corrigidos nesta etapa.
+### 8.2. Testes automatizados e limitações
 
-| # | Aviso | Tipo | Acompanhamento |
-| --- | --- | --- | --- |
-| 1 | Depreciação do runtime Node.js 20 usado por `actions/checkout@v4` e `actions/setup-node@v4` | Aviso da plataforma | Avaliar versões mais novas das actions |
-| 2 | Sete avisos `react-refresh/only-export-components` | Aviso de lint | Avaliar reorganização dos componentes de interface afetados |
-| 3 | Depreciação do módulo `punycode` durante a execução/limpeza | Aviso de runtime | Identificar a dependência de origem |
-| 4 | `vite-tsconfig-paths` possivelmente desnecessário (Vite já resolve caminhos do TypeScript) | Aviso de build | Avaliar remoção em tarefa própria |
-| 5 | Chunk do cliente acima de 500 kB antes da compressão | Aviso de build | Avaliar divisão de código |
-| 6 | Futura migração de `ubuntu-latest` para Ubuntu 26 | Notificação da plataforma | Acompanhar e, se necessário, fixar a versão do runner |
-| 7 | Atividade de cache no log | Observação | Investigar separadamente antes de adicionar configurações de cache |
+Os testes automatizados abrangem funções relacionadas às ideias, categorias, prioridades, status, datas, persistência local e validações de anexos.
+
+O conjunto atual possui 25 testes distribuídos em 4 arquivos de teste.
+
+Alguns cenários ainda dependem de validação adicional, especialmente o envio e a abertura reais de anexos no serviço de nuvem. Portanto, os testes automatizados não substituem a validação manual da aplicação publicada.
+
+### 8.3. Validação por Pull Request
+
+Foi realizado um Pull Request de teste para validar o fluxo de integração entre uma branch de trabalho, o GitHub Actions e a proteção da branch `main`.
+
+O Pull Request utilizou a branch `test/validar-protecao-ci` e o commit `7c71c28`, com uma alteração documental temporária.
+
+Resultados observados:
+
+- Os checks da CI associados ao evento `push` foram aprovados.
+- Os checks da CI associados ao evento `pull_request` foram aprovados.
+- O check da Vercel para o deployment de preview foi aprovado.
+- O GitHub indicou que todas as verificações obrigatórias haviam passado.
+- O Pull Request foi fechado posteriormente e a branch de teste foi removida.
+
+Essa validação confirmou o funcionamento do fluxo de Pull Request com verificações bem-sucedidas. **Não foi realizado um teste deliberado de falha da CI** para verificar se uma alteração com testes reprovados seria bloqueada.
+
+### 8.4. Proteção da branch principal
+
+Foi criado um ruleset de proteção para a branch `main`, incluindo o status check obrigatório `Lint, typecheck, test e build`.
+
+Essa configuração busca impedir a integração de alterações por Pull Request quando a verificação obrigatória não tiver sido aprovada.
+
+A proteção deve ser reavaliada caso o nome do workflow, do job ou dos status checks seja alterado.
+
+### 8.5. Avisos identificados
+
+Durante as verificações, foram observados avisos que não impediram a conclusão do workflow:
+
+- avisos de lint relacionados a `react-refresh/only-export-components`;
+- aviso de depreciação do módulo `punycode`;
+- notificações relacionadas às versões das GitHub Actions;
+- avisos do processo de build, incluindo o tamanho do bundle do cliente;
+- observações relacionadas à configuração do Vite e do ambiente de build.
+
+Esses itens permanecem como oportunidades de melhoria. A existência de avisos não deve ser confundida com falha das verificações.
+
+### 8.6. Escopo da validação
+
+Os resultados registrados representam verificações realizadas em versões específicas do projeto. Eles não garantem que toda alteração futura estará correta.
+
+O processo de qualidade combina testes automatizados, revisão das alterações, validação funcional e verificação da versão publicada.
 
 
 # 11 — Versionamento
@@ -1213,6 +1255,94 @@ Antes de considerar uma alteração concluída, recomenda-se verificar:
 Após a publicação, a versão disponível no endereço da aplicação representa o ambiente de produção do projeto.
 
 Alterações futuras devem ser validadas antes de serem consideradas estáveis.
+
+---
+
+## 6. Integração entre GitHub e Vercel
+
+O repositório GitHub `AlexandroLeao/app-project-ideias` está conectado ao projeto correspondente na Vercel.
+
+O histórico de deployments confirma a criação de deployments de produção a partir de alterações na branch `main`. Durante a validação por Pull Request, também foi gerado um deployment de preview para a branch de teste.
+
+Essa integração permite que alterações enviadas ao repositório sejam utilizadas pela Vercel para gerar novas versões da aplicação.
+
+---
+
+### 6.1. Ambientes de publicação
+
+**Produção:** corresponde à versão disponibilizada no endereço principal da aplicação:
+
+https://app-project-ideias.vercel.app/
+
+**Preview:** corresponde a uma versão temporária gerada para validar alterações de uma branch ou Pull Request antes da integração à branch principal.
+
+O deployment de preview permite verificar uma alteração sem precisar substituir imediatamente a versão principal utilizada em produção.
+
+---
+
+### 6.2. Processo de publicação
+
+O fluxo observado no projeto pode ser representado da seguinte forma:
+
+```text
+Alteração no código
+        ↓
+Commit em uma branch
+        ↓
+Push para o GitHub
+        ↓
+GitHub Actions executa a CI
+        ↓
+Pull Request e revisão dos checks
+        ↓
+Integração à branch main
+        ↓
+Vercel gera o deployment de produção
+        ↓
+Validação da aplicação publicada
+```
+
+Esse diagrama representa o fluxo recomendado de trabalho. A CI e a publicação da Vercel são integrações distintas; a execução bem-sucedida de uma não comprova automaticamente que a outra esteja configurada para bloquear ou aguardar a primeira em todos os cenários.
+
+---
+
+### 6.3. Proteção da branch principal
+
+Foi configurado um ruleset no GitHub para a branch `main`, com o status check obrigatório `Lint, typecheck, test e build`.
+
+A validação realizada por Pull Request confirmou que os checks da CI e da Vercel foram aprovados no cenário testado.
+
+Não foi executado um teste deliberado com a CI reprovada. Por isso, a documentação não afirma que esse cenário de falha tenha sido validado experimentalmente.
+
+---
+
+### 6.4. Limites do processo atual
+
+O processo de publicação confirmado inclui a integração GitHub–Vercel, a geração de previews e a publicação de versões de produção.
+
+Ainda é necessário distinguir esses recursos da garantia de que a publicação de produção só ocorre após a aprovação da CI. Essa dependência não deve ser considerada comprovada apenas porque os dois serviços apresentam checks aprovados no Pull Request.
+
+Também não existe, no workflow de CI documentado, uma etapa explícita de publicação na Vercel. A publicação é gerenciada pela integração configurada entre o GitHub e a Vercel.
+
+---
+
+### 6.5. Procedimento recomendado para futuras alterações
+
+Para alterações que afetem o código da aplicação:
+
+1. Criar uma branch específica para a mudança.
+2. Implementar a alteração e executar as verificações localmente.
+3. Registrar a alteração em um commit.
+4. Enviar a branch ao GitHub.
+5. Abrir um Pull Request para `main`.
+6. Aguardar a conclusão dos checks obrigatórios.
+7. Conferir o preview da Vercel, quando aplicável.
+8. Integrar o Pull Request somente após a aprovação dos checks.
+9. Confirmar o resultado do deployment de produção.
+10. Testar as funcionalidades afetadas na aplicação publicada.
+
+Esse fluxo reduz o risco de integrar alterações sem validação e mantém um histórico rastreável do desenvolvimento.
+
 
 # 13 — Resultados do Projeto
 
