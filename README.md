@@ -444,6 +444,50 @@ O repositório também funciona como espaço para documentação técnica do pro
 
 ---
 
+# CI/CD — Integração e Publicação Contínuas
+
+O projeto utiliza GitHub Actions e Vercel para automatizar a validação e a publicação da aplicação.
+
+## Integração Contínua (CI)
+
+O workflow `.github/workflows/ci.yml` executa automaticamente as seguintes verificações em pushes e pull requests:
+
+- Instalação de dependências com lockfile congelado;
+- Lint;
+- Verificação de tipos com TypeScript;
+- Testes automatizados;
+- Build da aplicação.
+
+A execução bem-sucedida confirma que o código passou pelas verificações automatizadas configuradas no projeto.
+
+## Proteção da branch principal
+
+A branch `main` possui um ruleset no GitHub que exige a aprovação do status check `Lint, typecheck, test e build` antes da integração de alterações por pull request.
+
+Esse fluxo permite revisar alterações e verificar os resultados da CI antes de incorporá-las à branch principal.
+
+## Publicação Contínua (CD)
+
+A Vercel está integrada ao repositório GitHub e realiza implantações automáticas a partir das alterações na branch principal. Pull requests também podem gerar implantações de preview para validação antes da publicação em produção.
+
+A CI é executada pelo GitHub Actions, enquanto a publicação é gerenciada pela integração da Vercel.
+
+**Observação:** a exigência de aprovação da CI antes de uma publicação de produção pela Vercel não foi verificada de forma independente.
+
+## Fluxo de desenvolvimento
+
+1. Criar uma branch para a alteração.
+2. Implementar e validar a mudança.
+3. Enviar a branch ao GitHub.
+4. Abrir um pull request.
+5. Aguardar os checks automáticos e conferir o preview.
+6. Integrar a alteração à `main` após a aprovação dos requisitos.
+7. Verificar o resultado da implantação na Vercel.
+
+Esse processo ajuda a reduzir a integração de alterações que não passaram pelas verificações automatizadas e facilita a validação antes da publicação.
+
+---
+
 # Deploy
 
 A aplicação foi publicada e está disponível na Vercel.
